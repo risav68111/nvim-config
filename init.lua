@@ -1,3 +1,1 @@
- require('config')
--- require("kickstart")
-print("Nvim started...")
+require 'config'
