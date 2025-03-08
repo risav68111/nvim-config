@@ -2,7 +2,7 @@ require("config.set")
 require("config.remap")
 
 require("config.lazy")
-require 'config.health'
+-- require 'config.health'
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
