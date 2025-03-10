@@ -1,8 +1,6 @@
-require("config.set")
-require("config.remap")
-
-require("config.lazy")
--- require 'config.health'
+require 'config.remap'
+require 'config.set'
+require 'config.lazy''
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -16,4 +14,3 @@ vim.api.nvim_create_autocmd("FocusLost", {
     pattern = "*",
     command = "wa", -- Write all changed buffers
 })
-
