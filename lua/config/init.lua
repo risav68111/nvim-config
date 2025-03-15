@@ -1,7 +1,8 @@
-require("config.set")
-require("config.remap")
+require "config.set" 
+require "config.remap" 
 
-require("config.lazy")
+require "config.lazy" 
+require "config.shell" 
 -- require 'config.health'
 
 vim.api.nvim_create_autocmd('TextYankPost', {
