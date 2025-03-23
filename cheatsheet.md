@@ -63,5 +63,12 @@
 `:wq` Save & Quit    
 `:!command` Execute Shell Command    
 
+ ----
+
+##jdtls for faster coding
+`<leader>gs` Generate Getters/Setters    
+`<leader>gc` Generate Constructor
+`<leader>gt` Generate toString()
+
 Neovim is now set up and ready to use! 🚀
 
