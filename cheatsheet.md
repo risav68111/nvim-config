@@ -63,9 +63,9 @@
 `:wq` Save & Quit    
 `:!command` Execute Shell Command    
 
- ----
+ ----    
 
-##jdtls for faster coding
+## **jdtls for faster coding**    
 `<leader>gs` Generate Getters/Setters    
 `<leader>gc` Generate Constructor
 `<leader>gt` Generate toString()
