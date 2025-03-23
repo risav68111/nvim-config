@@ -65,7 +65,7 @@
 
  ----    
 
-## **jdtls for faster coding**    
+## **jdtls Shortcuts**    
 `<leader>gs` Generate Getters/Setters    
 `<leader>gc` Generate Constructor    
 `<leader>gt` Generate toString()    
