@@ -17,7 +17,7 @@ return {
         })
 
         -- Keybinding to toggle Nvim Tree
-        vim.keymap.set("n", "<C-b>", ":NvimTreeToggle<CR>", { noremap = true, silent = true })
+        vim.keymap.set("n", "<C-b>", ":NvimTreeToggle<CR>", { noremap = false, silent = true })
     end,
 }
 

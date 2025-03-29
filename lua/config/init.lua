@@ -13,8 +13,3 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
-vim.api.nvim_create_autocmd("FocusLost", {
-    pattern = "*",
-    command = "wa", -- Write all changed buffers
-})
-
