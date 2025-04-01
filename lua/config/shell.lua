@@ -1,4 +1,3 @@
-  
 
 -- saves all files changing windows
 vim.api.nvim_create_autocmd("FocusLost", {
@@ -43,7 +42,7 @@ vim.keymap.set("n", "<leader>r", function()
   local filename= vim.fn.expand('%:t:r')   -- Get file name without extension
 
   if filetype == "java" then
-    vim.cmd("!java " .. filename_no_ext)
+    vim.cmd("!java " .. filename)
   elseif filetype == "lua" then
     vim.cmd("!lua " .. filepath)
   elseif filetype == "python" then
