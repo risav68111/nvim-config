@@ -1,4 +1,4 @@
-vim.g.mapleader= " "
+vim.g.mapleader = " "
 
 vim.keymap.set("n", "<leader>fe", vim.cmd.Ex)
 
@@ -12,7 +12,7 @@ vim.keymap.set("v", "<leader>p", "\"_dp")
 
 
 -- next greatest remap ever : asbjornHaland
-vim.keymap.set({"n", "v"}, "<leader>y", [["+y]])
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
 vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
@@ -21,8 +21,9 @@ vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 vim.keymap.set("n", "<leader>j", [[/^##\+<CR>]], { buffer = true, silent = true })
 vim.keymap.set("n", "<leader>k", [[?^##\+<CR>]], { buffer = true, silent = true })
 
--- Replace word under cursor 
-vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/>]], { desc = "Replace word under cursor" })
+-- Replace word under cursor
+vim.keymap.set("n", "<leader>re", [[:%s/]], { desc = "open replace " })
+vim.keymap.set("n", "<leader>rw", [[:%s/\<<C-r><C-w>\>/]], { desc = "Replace word under cursor" })
 
 
 -- Search for highlighted text in buffer
