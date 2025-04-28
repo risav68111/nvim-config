@@ -10,7 +10,17 @@ return {
 
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-      vim.keymap.set('n', '<leader>gf', builtin.git_files, {})
+
+      -- vim.keymap.set('n', '<leader>gf', builtin.git_files, {})
+      vim.keymap.set('n', '<leader>gf', function()
+        local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
+        if git_root == nil or git_root == "" or git_root:match("fatal") then
+          vim.notify("🔒 Git not initialized in this directory", vim.log.levels.INFO, { title = "Telescope Git Files" })
+          return
+        end
+        builtin.git_files()
+      end, { desc = "Telescope Git Files (Safe)" })
+
       vim.keymap.set('n', '<leader>fws', function()
         local word = vim.fn.expand("<cword>")
         builtin.grep_string({ search = word })
@@ -18,9 +28,6 @@ return {
       vim.keymap.set('n', '<leader>fWs', function()
         local word = vim.fn.expand("<cWORD>")
         builtin.grep_string({ search = word })
-      end)
-      vim.keymap.set('n', '<leader>fss', function()
-        builtin.grep_string({ search = vim.fn.input("Grep > ") })
       end)
       vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
       vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })

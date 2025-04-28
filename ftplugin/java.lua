@@ -1,5 +1,5 @@
 local home = os.getenv 'USERPROFILE' -- For Windows
-local workspace_path = home .. '\\AppData\\Local\\nvim\\jdtls-workspace\\'
+local workspace_path = home .. '\\AppData\\Local\\nvim-data\\jdtls-workspace\\'
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 local workspace_dir = workspace_path .. project_name
 

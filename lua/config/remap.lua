@@ -3,6 +3,7 @@ vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>fe", vim.cmd.Ex)
 
 vim.keymap.set("i", "<C-c>", "<Esc>")
+-- vim.keymap.set("i", "<leader>jf", "<Esc>")
 
 -- move selected text
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")
@@ -38,3 +39,5 @@ end, { desc = "Toggle highlight search" })
 
 vim.keymap.set("n", "<leader>nn", vim.cmd.bnext)
 vim.keymap.set("n", "<leader>b", vim.cmd.bprev)
+
+vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover Docs" })
