@@ -33,9 +33,6 @@ end
 -- Set a keymap to toggle comments in Visual Mode
 vim.api.nvim_set_keymap('v', '<leader>mlc', ":lua ToggleMultiLineComment()<CR>", { noremap = true, silent = true })
 
-
-
-
 vim.keymap.set("n", "<leader>r", function()
   local filetype = vim.bo.filetype
   local filename = vim.fn.expand('%:t')   -- Get file name (e.g., "main.java")
@@ -53,10 +50,9 @@ vim.keymap.set("n", "<leader>r", function()
   elseif filetype == "cpp" then
     vim.cmd("!g++ " .. filename .. " -o " .. filename_no_ext .. " && ./" .. filename_no_ext)
   else
-    print("Unsupported file type: " .. filetype)
+    vim.notify("Unsupported file type: " .. filetype)
   end
 end, { noremap = true, silent = true })
-
 
 
 -- Function to check if a package declaration already exists
@@ -82,7 +78,7 @@ end
 -- Function to insert package declaration if not present
 local function insertPackage()
   if hasPackage() then
-    print("🚨 Package already exists in this file!")
+    vim.notify("🚨 Package already exists in this file!")
     return
   end
 
@@ -94,16 +90,20 @@ local function insertPackage()
   -- Convert directory path into package name
   local relative_path = filepath:gsub("^" .. escaped_root .. "[\\/]*", ""):gsub("[\\/]", ".")
 
-  local a= string.find(relative_path, "%.java%.")
+  local a= string.find(relative_path, "%.src%.main%.java%.")
 
-  if a then
-    local new_str = string.sub(relative_path, a+6)
-    Result= string.gsub(new_str, "[\\/]", ".")
+  if not a then
+    local filename= vim.fn.expand("%:t")
+    vim.notify("🚨 File: ".. filename .." is not a project")
+    return;
   end
+  local new_str = string.sub(relative_path, a+15)
+  Result= string.gsub(new_str, "[\\/]", ".")
   local package_name = Result ~= "" and "package " .. Result .. ";" or ""
   if package_name ~= "" then
     vim.api.nvim_buf_set_lines(0, 0, 0, false, { package_name, "" })
-    print("✅ Package inserted successfully!")
+  local a= string.find(relative_path, "%.src%.main%.java%.")
+    vim.notify("✅ Package inserted successfully!")
   end
 end
 
@@ -113,7 +113,7 @@ local function insertClass()
   local classname = filename:gsub("%.java$", "") -- Remove .java extension
 
   if hasClass(classname) then
-    print("🚨 Class '" .. classname .. "' already exists in this file!")
+    vim.notify("🚨 Class '" .. classname .. "' already exists in this file!")
     return
   end
 
@@ -126,7 +126,7 @@ local function insertClass()
 
   -- Insert the class template
   vim.api.nvim_buf_set_lines(0, -1, -1, false, template)
-  print("✅ Class inserted successfully!")
+  vim.notify("✅ Class inserted successfully!")
 end
 
 -- Function to insert both package & class safely
