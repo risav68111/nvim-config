@@ -1,6 +1,4 @@
-Here is a properly formatted **README.md** for your GitHub repository:
 
-```markdown
 # 🧠 Personal Neovim Configuration (Java, Python)
 
 This is my personal Neovim configuration tailored for Java, Python, and JavaScript development. It includes custom keybindings, personal cheatsheets, and Lua-based plugin management.
