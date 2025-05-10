@@ -25,6 +25,7 @@
 `n` / `N`             → Next / Previous result  
 `<leader>hls`         → Highlight last searched  
 `:noh`                → Remove highlight  
+`:verbose map!`       → If key mapping exists or not
 
 ### Comment
 `gc`                  → Comment line or selection  

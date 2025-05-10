@@ -4,6 +4,9 @@ vim.keymap.set("n", "<leader>fe", vim.cmd.Ex)
 
 vim.keymap.set("i", "<C-c>", "<Esc>")
 -- vim.keymap.set("i", "<leader>jf", "<Esc>")
+-- vim.keymap.set("i", "<leader>fj", "<Esc>")
+-- vim.keymap.set("i", "jjff", "<Esc>")
+-- vim.keymap.set("i", "fjf", "<Esc>")
 
 -- move selected text
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv")

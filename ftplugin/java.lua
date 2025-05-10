@@ -60,6 +60,25 @@ local config = {
   init_options = {
     bundles = {},
   },
+
+  on_attach = function(client, bufnr)
+    if client.server_capabilities.inlayHintProvider then
+      vim.lsp.inlay_hint.enable(bufnr, true)
+    end
+  end,
+
+  capabilities = {
+    workspace = {
+      configuration = true,
+    },
+    textDocument = {
+      completion = {
+        completionItem = {
+          snippetSupport = true,
+        },
+      },
+    },
+  },
 }
 require('jdtls').start_or_attach(config)
 
