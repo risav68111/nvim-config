@@ -1,5 +1,5 @@
--- saves all files changing windows
 vim.api.nvim_create_autocmd("FocusLost", {
+  -- saves all files changing windows
   pattern = "*",
   callback = function()
     pcall(vim.cmd, "silent! update")
@@ -91,19 +91,19 @@ local function insertPackage()
   -- Convert directory path into package name
   local relative_path = filepath:gsub("^" .. escaped_root .. "[\\/]*", ""):gsub("[\\/]", ".")
 
-  local a= string.find(relative_path, "%.src%.main%.java%.")
+  local a = string.find(relative_path, "%.src%.main%.java%.")
 
   if not a then
-    local filename= vim.fn.expand("%:t")
-    vim.notify("🚨 File: ".. filename .." is not a project")
+    local filename = vim.fn.expand("%:t")
+    vim.notify("🚨 File: " .. filename .. " is not a project")
     return;
   end
-  local new_str = string.sub(relative_path, a+15)
-  Result= string.gsub(new_str, "[\\/]", ".")
+  local new_str = string.sub(relative_path, a + 15)
+  Result = string.gsub(new_str, "[\\/]", ".")
   local package_name = Result ~= "" and "package " .. Result .. ";" or ""
   if package_name ~= "" then
     vim.api.nvim_buf_set_lines(0, 0, 0, false, { package_name, "" })
-  local a= string.find(relative_path, "%.src%.main%.java%.")
+    local a = string.find(relative_path, "%.src%.main%.java%.")
     vim.notify("✅ Package inserted successfully!")
   end
 end
@@ -112,6 +112,11 @@ end
 local function insertClass()
   local filename = vim.fn.expand("%:t")          -- Get file name
   local classname = filename:gsub("%.java$", "") -- Remove .java extension
+
+  if vim.bo.filetype ~= 'java' then
+    vim.notify("🚨 File is not java")
+    return
+  end
 
   if hasClass(classname) then
     vim.notify("🚨 Class '" .. classname .. "' already exists in this file!")
@@ -132,7 +137,7 @@ end
 
 -- Function to insert both package & class safely
 local function insert_full()
- insertPackage()
+  insertPackage()
   insertClass()
 end
 
@@ -140,3 +145,27 @@ end
 vim.api.nvim_create_user_command("Insp", insertPackage, {})
 vim.api.nvim_create_user_command("Insc", insertClass, {})
 vim.api.nvim_create_user_command("Ins", insert_full, {})
+
+
+local function insertReact()
+  local filename = vim.fn.expand("%:t")        -- Get file name
+  local filename_na = filename:gsub("%.jsx$", "") -- Remove .java extension
+
+  -- Java class template
+  local template = {
+    "import React, { useEffect, useState } from \'react\'",
+    "import axios from 'axios'",
+    " ",
+    "const " .. filename_na .. " = () => {",
+    " ",
+    "}",
+    " ",
+    "default export " .. filename_na .. "",
+  }
+
+  -- Insert the class template
+  vim.api.nvim_buf_set_lines(0, -1, -1, false, template)
+  vim.notify("✅ RAFC inserted successfully!")
+end
+
+vim.api.nvim_create_user_command("Rafc", insertReact, {})

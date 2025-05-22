@@ -11,7 +11,7 @@ local extendedClientCapabilities = jdtls.extendedClientCapabilities
 
 local config = {
   cmd = {
-    'java',
+    'C:\\Java\\jdk-21\\bin\\java.exe',
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -23,7 +23,7 @@ local config = {
     'java.base/java.util=ALL-UNNAMED',
     '--add-opens',
     'java.base/java.lang=ALL-UNNAMED',
-    '-javaagent:' .. home .. '\\AppData\\Local\\nvim-data\\mason\\packages\\jdtls\\lombok.jar',
+    '-javaagent:'.. home .. '\\AppData\\Local\\nvim-data\\mason\\packages\\jdtls\\lombok.jar',
     '-jar',
     vim.fn.glob(home .. '\\AppData\\Local\\nvim-data\\mason\\packages\\jdtls\\plugins\\org.eclipse.equinox.launcher_*.jar'),
     '-configuration',
@@ -52,7 +52,7 @@ local config = {
         },
       },
       format = {
-        enabled = false,
+        enabled = true,
       },
     },
   },

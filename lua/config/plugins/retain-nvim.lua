@@ -4,12 +4,12 @@ return {
   -- name = 'retain',
   -- lazy = false,
   config = function()
-    require('retain')
+    local retain = require('retain')
     vim.keymap.set("n", "<leader>cd", function()
-      require("retain").run()
+      retain.run()
     end, { desc = "Telescope CD Picker" })
     vim.keymap.set("n", "<leader>cdd", function()
-      require("retain").delWin()
+      retain.delWin()
     end, { desc = "Telescope CD Picker" })
   end,
 }
