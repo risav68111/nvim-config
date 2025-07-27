@@ -1,7 +1,8 @@
 
-# 🧠 Personal Neovim Configuration (Java, Python)
+# 🧠 My frankenstein nvim setup:
 
-This is my personal Neovim configuration tailored for Java, Python, and JavaScript development. It includes custom keybindings, personal cheatsheets, and Lua-based plugin management.
+
+This is my personal Neovim configuration got configuration from others developers nvim config and modified according to my needs. It includes custom keybindings, personal cheatsheets, and Lua-based plugin management.
 
 ---
 
