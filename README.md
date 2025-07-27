@@ -31,38 +31,23 @@ Make sure the following tools are installed before proceeding:
 | [Git](https://git-scm.com/)                      | For cloning the configuration repo               |
 |--------------------------------------------------|--------------------------------------------------|
 
-Optional but Recommended:
-
-- `node`, `npm` – for JavaScript LSP
-- `python3`, `pip` – for Python LSP
-
----
-
 ## 📥 Installation
 
 You can install this configuration using GitHub CLI or by downloading the repository as a ZIP file.
 
-### Option 1: Clone using GitHub CLI (Recommended)
+Files will go inside the following folder location according to the OS.
+---
+### Linux/macOS:
 ```bash
-gh repo clone <your-username>/<your-nvim-config-repo> ~/.config/nvim
+~/.config/nvim/
 ```
 
-### Option 2: Download as ZIP
-
-1. **Download the ZIP file** from the GitHub repository.
-2. **Extract it** to the appropriate folder based on your operating system:
-
-#### **Linux/macOS**:
+### Windows:
 ```
-~/.config/nvim
+C:\Users\<YourUsername>\AppData\Local\nvim\
 ```
 
-#### **Windows**:
-```
-C:\Users\<YourUsername>\AppData\Local\nvim
-```
-
-After extraction, the folder structure should look like this:
+File setup inside nvim folder:
 ```
 ftplugin/
 nvim/
@@ -70,29 +55,6 @@ nvim/
      └── config/
 init.lua
 ```
-
----
-
-## 🧠 Setting Up `init.lua`
-
-Make sure `init.lua` exists in the correct location and includes the following line:
-
-```lua
-require 'config'
-```
-
-### Linux/macOS:
-```bash
-nano ~/.config/nvim/init.lua
-```
-
-### Windows:
-```powershell
-notepad C:\Users\<YourUsername>\AppData\Local\nvim\init.lua
-```
-
-After adding the line, save and close the file.
-
 ---
 
 ## 🧪 Launch Neovim
