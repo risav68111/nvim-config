@@ -52,7 +52,12 @@ return {
             ensure_installed = {
                 "eslint",
                 "lua_ls",
-            },
+                "html",
+                "cssls",
+                "jsonls",
+                "emmet_ls",
+            }
+            ,
             handlers = {
                 function(server_name) -- default handler (optional)
                     require("lspconfig")[server_name].setup {
@@ -94,6 +99,37 @@ return {
                         }
                     }
                 end,
+                ["html"] = function()
+                    require("lspconfig").html.setup({
+                        capabilities = capabilities,
+                    })
+                end,
+
+                ["cssls"] = function()
+                    require("lspconfig").cssls.setup({
+                        capabilities = capabilities,
+                    })
+                end,
+
+                ["tsserver"] = function()
+                    require("lspconfig").tsserver.setup({
+                        capabilities = capabilities,
+                    })
+                end,
+
+                ["jsonls"] = function()
+                    require("lspconfig").jsonls.setup({
+                        capabilities = capabilities,
+                    })
+                end,
+
+                ["emmet_ls"] = function()
+                    require("lspconfig").emmet_ls.setup({
+                        capabilities = capabilities,
+                        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescriptreact" }
+                    })
+                end,
+
             }
         })
 
