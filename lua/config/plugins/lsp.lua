@@ -56,13 +56,19 @@ return {
                 "cssls",
                 "jsonls",
                 "emmet_ls",
-            }
-            ,
+            },
+
+            -- config = function()
+            --     for lsp in ensure_installed then
+            --         vim.lsp.enable(lsp)
+            --     end
+            -- end,
             handlers = {
                 function(server_name) -- default handler (optional)
-                    require("lspconfig")[server_name].setup {
-                        capabilities = capabilities
-                    }
+                    vim.lsp.config(server_name)
+                    -- require("lspconfig")[server_name].setup {
+                    --     capabilities = capabilities
+                    -- }
                 end,
 
                 zls = function()
@@ -99,37 +105,6 @@ return {
                         }
                     }
                 end,
-                ["html"] = function()
-                    require("lspconfig").html.setup({
-                        capabilities = capabilities,
-                    })
-                end,
-
-                ["cssls"] = function()
-                    require("lspconfig").cssls.setup({
-                        capabilities = capabilities,
-                    })
-                end,
-
-                ["tsserver"] = function()
-                    require("lspconfig").tsserver.setup({
-                        capabilities = capabilities,
-                    })
-                end,
-
-                ["jsonls"] = function()
-                    require("lspconfig").jsonls.setup({
-                        capabilities = capabilities,
-                    })
-                end,
-
-                ["emmet_ls"] = function()
-                    require("lspconfig").emmet_ls.setup({
-                        capabilities = capabilities,
-                        filetypes = { "html", "css", "scss", "javascript", "javascriptreact", "typescriptreact" }
-                    })
-                end,
-
             }
         })
 
