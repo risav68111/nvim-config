@@ -65,7 +65,9 @@ return {
             -- end,
             handlers = {
                 function(server_name) -- default handler (optional)
-                    vim.lsp.config(server_name)
+                    if server_name ~= "jdtls" then
+                        vim.lsp.config(server_name)
+                    end
                     -- require("lspconfig")[server_name].setup {
                     --     capabilities = capabilities
                     -- }

@@ -28,7 +28,7 @@ return {
     })
 
     -- Set keymap to toggle with Ctrl + b
-    vim.keymap.set('n', '<C-b>', ':NvimTreeToggle<CR>', { noremap = true, silent = true, desc = "Toggle NvimTree" })
+    vim.keymap.set('n', '<C-t>', ':NvimTreeToggle<CR>', { noremap = true, silent = true, desc = "Toggle NvimTree" })
   end,
 }
 

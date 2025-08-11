@@ -179,9 +179,3 @@ local function insertReact()
 end
 
 vim.api.nvim_create_user_command("Rafc", insertReact, {})
-
-
-
---keymaps
-vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action,
-    { buffer = bufnr, desc = "LSP Code Action" });
