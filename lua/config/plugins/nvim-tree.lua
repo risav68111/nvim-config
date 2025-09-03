@@ -4,7 +4,7 @@ return {
   config = function()
     require("nvim-tree").setup({
       view = {
-        width = 30,
+        width = 25,
         side = "left",
       },
       renderer = {
@@ -19,16 +19,14 @@ return {
         },
       },
       update_focused_file = {
-        enable = true,
+        enable = false,
         update_cwd = true,
       },
       git = {
         enable = true,
       },
     })
-
-    -- Set keymap to toggle with Ctrl + b
-    vim.keymap.set('n', '<C-t>', ':NvimTreeToggle<CR>', { noremap = true, silent = true, desc = "Toggle NvimTree" })
+    vim.keymap.set('n', '<leader>t', ':NvimTreeToggle<CR>', { noremap = true, silent = true, desc = "Toggle NvimTree" })
   end,
 }
 

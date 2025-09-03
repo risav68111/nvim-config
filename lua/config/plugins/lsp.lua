@@ -64,14 +64,15 @@ return {
             --     end
             -- end,
             handlers = {
-                function(server_name) -- default handler (optional)
+                function(server_name)
                     if server_name ~= "jdtls" then
-                        vim.lsp.config(server_name)
+                        require("lspconfig")[server_name].setup {
+                            capabilities = capabilities,
+                            on_attach = on_attach,
+                        }
                     end
-                    -- require("lspconfig")[server_name].setup {
-                    --     capabilities = capabilities
-                    -- }
                 end,
+
 
                 zls = function()
                     local lspconfig = require("lspconfig")
@@ -135,6 +136,11 @@ return {
 
         vim.diagnostic.config({
             -- update_in_insert = true,
+            virtual_text = false,
+            signs = true,
+            underline = true,
+            update_in_insert = false,
+            severity_sort = true,
             float = {
                 focusable = false,
                 style = "minimal",

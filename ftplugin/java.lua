@@ -32,6 +32,7 @@ local config = {
         '-Dlog.protocol=true',
         '-Dlog.level=ALL',
         '-Xms1g',
+        '-javaagent:' .. jdtls_path .. '/lombok.jar',
         '--add-modules=ALL-SYSTEM',
         '--add-opens', 'java.base/java.util=ALL-UNNAMED',
         '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
@@ -76,7 +77,7 @@ local config = {
             },
             configuration = {
                 runtimes = {
---[[
+                    --[[
                     {
                         name = 'JavaSE-1.8',
                         path = '/path/to/java-8', -- Adjust to your Java 8 path
@@ -86,7 +87,7 @@ local config = {
                         name = 'JavaSE-17',
                         path = '/path/to/java-17', -- Adjust to your Java 17 path
                     },
---]]
+                    --]]
                 },
             },
         },
@@ -101,13 +102,9 @@ local config = {
 
         -- Keymaps for code actions and other LSP features
         local bufopts = { noremap = true, silent = true, buffer = bufnr }
-        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)                          -- Code actions
-        vim.keymap.set('n', '<A-o>', jdtls.organize_imports, bufopts)                                -- Organize imports
-        vim.keymap.set('n', 'crv', jdtls.extract_variable, bufopts)                                  -- Extract variable
-        vim.keymap.set('v', 'crv', [[<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>]], bufopts)
-        vim.keymap.set('n', 'crc', jdtls.extract_constant, bufopts)                                  -- Extract constant
-        vim.keymap.set('v', 'crc', [[<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>]], bufopts)
-        vim.keymap.set('v', 'crm', [[<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>]], bufopts) -- Extract method
+        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts) -- Code actions
+        vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { desc = "LSP Rename" })
+
 
         -- Add JDTLS-specific commands
         jdtls.setup.add_commands()
@@ -125,4 +122,3 @@ jdtls.start_or_attach(config)
 --         jdtls.start_or_attach(config)
 --     end,
 -- })
-
