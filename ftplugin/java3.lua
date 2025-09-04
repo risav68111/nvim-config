@@ -100,9 +100,9 @@
 --         includeDecompiledSources = true,
 --       },
 --       inlayHints = {
---         parameterNames = {
---           enabled = "all",
---         },
+--           parameterNames = {
+--               enabled = "all",
+--           },
 --       },
 --       codeGeneration = {
 --         toString = {
@@ -120,14 +120,14 @@
 --   signatureHelp = { enabled = true },
 --   extendedClientCapabilities = extendedClientCapabilities,
 --   completion = {
---     favoriteStaticMembers = {
---       "org.junit.jupiter.api.Assertions.*",
---       "java.util.Objects.requireNonNull",
---       "java.util.Objects.requireNonNullElse",
---       "org.mockito.Mockito.*",
---       "org.springframework.*"
---     },
---     importOrder = {
+--       favoriteStaticMembers = {
+--         "org.junit.jupiter.api.Assertions.*",
+--         "java.util.Objects.requireNonNull",
+--         "java.util.Objects.requireNonNullElse",
+--         "org.mockito.Mockito.*",
+--         "org.springframework.*"
+--       },
+--       importOrder = {
 --       "java",
 --       "javax",
 --       "com",
@@ -156,36 +156,13 @@
 --
 -- require('jdtls').start_or_attach(config)
 --
--- vim.lsp.set_log_level("debug") -- Enable LSP logging
---
 -- config["on_attach"] = function(client, bufnr)
 --   local _, _ = pcall(vim.lsp.codelens.refresh)
---   require("jdtls").setup_dap({ hotcodereplace = "auto" })
---   print("Hover handler:", vim.inspect(vim.lsp.handlers["textDocument/hover"]))
---   require("lvim.lsp").on_attach(client, bufnr)
+--  require("jdtls").setup_dap({ hotcodereplace = "auto" })
+--  require("lvim.lsp").on_attach(client, bufnr)
 --   local status_ok, jdtls_dap = pcall(require, "jdtls.dap")
 --   if status_ok then
 --     jdtls_dap.setup_dap_main_class_configs()
---   end
---   vim.api.nvim_buf_set_keymap(bufnr, 'n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', {
---     desc = "Show Documentation",
---     noremap = true,
---     silent = true,
---   })   -- Use require("lspsaga.hover").render_hover_doc() if using lspsaga
---   vim.api.nvim_buf_set_keymap(bufnr, 'n', '<leader>dh', '<Cmd>lua require("jdtls").debug_hover()<CR>', {
---     desc = "Debug Hover Output",
---     noremap = true,
---     silent = true,
---   })
--- end
---
--- -- Define debug_hover function
--- require('jdtls').debug_hover = function()
---   local hover_result = vim.lsp.buf_request_sync(0, "textDocument/hover", vim.lsp.util.make_position_params(), 1000)
---   for _, result in pairs(hover_result or {}) do
---     if result.result and result.result.contents then
---       print(vim.inspect(result.result.contents))
---     end
 --   end
 -- end
 --
@@ -206,29 +183,6 @@
 --   return
 -- end
 --
--- local mappings = {
---   J = {
---     name = "Java",
---     o = { "<Cmd>lua require'jdtls'.organize_imports()<CR>", "Organize Imports" },
---     v = { "<Cmd>lua require('jdtls').extract_variable()<CR>", "Extract Variable" },
---     c = { "<Cmd>lua require('jdtls').extract_constant()<CR>", "Extract Constant" },
---     t = { "<Cmd>lua require'jdtls'.test_nearest_method()<CR>", "Test Method" },
---     T = { "<Cmd>lua require'jdtls'.test_class()<CR>", "Test Class" },
---     u = { "<Cmd>JdtUpdateConfig<CR>", "Update Config" },
---     i = { "<Cmd>lua require('jdtls').javap()<CR>", "Inspect Class" },
---     ca = { "<Cmd>lua require('jdtls').code_action()<CR>", "Code Action" },
---   },
--- }
---
--- local vmappings = {
---   J = {
---     name = "Java",
---     v = { "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", "Extract Variable" },
---     c = { "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", "Extract Constant" },
---     m = { "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", "Extract Method" },
---   },
--- }
---
 -- local opts = {
 --   mode = "n",
 --   prefix = "<leader>",
@@ -247,6 +201,21 @@
 --   nowait = true,
 -- }
 --
+-- local mappings = {
+--   ca = {
+--     "<Cmd>lua require('jdtls').code_action()<CR>", "Code Action",
+--   },
+--   rp = {
+--     "<Cmd>lua vim.lsp.buf.rename()<CR>", "Rename Project",
+--   },
+-- }
+--
+-- local vmappings = {
+--     v = { "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", "Extract Variable" },
+--     c = { "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", "Extract Constant" },
+--     m = { "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", "Extract Method" },
+-- }
 --
 -- which_key.register(mappings, opts)
+-- which_key.register(vmappings, vopts)
 -- which_key.register(vmappings, vopts)
