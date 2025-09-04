@@ -27,7 +27,7 @@ function ToggleMultiLineComment()
     -- Get selected lines
     local start_line, end_line = vim.fn.line("'<"), vim.fn.line("'>")
     vim.fn.append(start_line - 1, comment[1]) -- Insert opening comment
-    vim.fn.append(end_line + 1, comment[2]) -- Insert closing comment
+    vim.fn.append(end_line + 1, comment[2])   -- Insert closing comment
 end
 
 -- Set a keymap to toggle comments in Visual Mode
@@ -36,8 +36,8 @@ vim.api.nvim_set_keymap('v', '<leader>mlc', ":lua ToggleMultiLineComment()<CR>",
 
 vim.keymap.set("n", "<leader>r", function()
     local filetype = vim.bo.filetype
-    local filename = vim.fn.expand('%:t') -- Get file name (e.g., "main.java")
-    filepath = vim.fn.expand('%:p')       -- Get full file path
+    local filename = vim.fn.expand('%:t')   -- Get file name (e.g., "main.java")
+    filepath = vim.fn.expand('%:p')         -- Get full file path
     local filename = vim.fn.expand('%:t:r') -- Get file name without extension
 
     if filetype == "java" then
@@ -59,7 +59,7 @@ end, { noremap = true, silent = true })
 -- Function to check if a package declaration already exists
 local function hasPackage()
     for _, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, 20, false)) do
-        if line:match("%S") then              -- Check if the line is not empty
+        if line:match("%S") then                    -- Check if the line is not empty
             return line:match("^package%s+") ~= nil -- Return true if it starts with 'package'
         end
     end
@@ -108,7 +108,7 @@ local function insertPackage()
     -- Extract the part after 'src/main/java/'
     local package_path = relative_path:sub(java_index + #"src/main/java/")
     local package_name = package_path:gsub("/", ".")
-    
+
     -- Insert package declaration
     if package_name ~= "" then
         vim.api.nvim_buf_set_lines(0, 0, 0, false, { "package " .. package_name .. ";", "" })
@@ -120,7 +120,7 @@ end
 
 -- Function to insert Java class if not present
 local function insertClass()
-    local filename = vim.fn.expand("%:t")        -- Get file name
+    local filename = vim.fn.expand("%:t")          -- Get file name
     local classname = filename:gsub("%.java$", "") -- Remove .java extension
 
     if vim.bo.filetype ~= 'java' then
@@ -158,7 +158,7 @@ vim.api.nvim_create_user_command("Ins", insert_full, {})
 
 
 local function insertReact()
-    local filename = vim.fn.expand("%:t")         -- Get file name
+    local filename = vim.fn.expand("%:t")           -- Get file name
     local filename_na = filename:gsub("%.jsx$", "") -- Remove .java extension
 
     -- Java class template

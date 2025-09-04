@@ -33,7 +33,7 @@ function M.run_springboot()
   local cmd = mvnw_exists and { "./mvnw", "spring-boot:run" } or { "mvn", "spring-boot:run" }
 
   -- Create a new tab and terminal buffer
-  vim.cmd("tabnew")
+  vim.cmd("wa")
   local buf = vim.api.nvim_create_buf(true, false)
   vim.api.nvim_win_set_buf(0, buf)
 
