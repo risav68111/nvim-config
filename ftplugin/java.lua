@@ -104,6 +104,18 @@ local config = {
         local bufopts = { noremap = true, silent = true, buffer = bufnr }
         vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts) -- Code actions
 
+        vim.keymap.set("n", "K", function()
+            local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
+            if #diagnostics > 0 then
+                -- Show diagnostic if present
+                vim.diagnostic.open_float(nil, { focus = false })
+            else
+                -- Otherwise show hover info
+                vim.lsp.buf.hover()
+            end
+        end, { desc = "Show diagnostics or hover" })
+
+
         -- Add JDTLS-specific commands
         jdtls.setup.add_commands()
     end,
