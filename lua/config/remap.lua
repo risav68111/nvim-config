@@ -50,8 +50,8 @@ local springboot= require('config.springboot')
 
 vim.keymap.set("n", "<F10>", springboot.run_springboot, { desc = "Run Spring Boot App" })
 
-vim.keymap.set("n", "<A-h>", ":vertical resize +5<CR>")
-vim.keymap.set("n", "<A-l>", ":vertical resize -5<CR>")
-vim.keymap.set("n", "<A-k>", ":resize +2<CR>")
-vim.keymap.set("n", "<A-j>", ":resize -2<CR>")
+vim.keymap.set("n", "<A-L>", ":vertical resize +5<CR>")
+vim.keymap.set("n", "<A-H>", ":vertical resize -5<CR>")
+vim.keymap.set("n", "<A-K>", ":resize +2<CR>")
+vim.keymap.set("n", "<A-J>", ":resize -2<CR>")
 
