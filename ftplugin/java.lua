@@ -22,62 +22,68 @@ extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 extendedClientCapabilities.advancedGenerateAccessorsSupport = true
 extendedClientCapabilities.advancedGenerateToStringSupport = true -- Enable toString code action
 
+-- Set Java-specific indentation (4 spaces)
+vim.bo.tabstop = 4
+vim.bo.shiftwidth = 4
+vim.bo.softtabstop = 4
+vim.bo.expandtab = true
+
 -- JDTLS configuration
 local config = {
-    cmd = {
-        "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
-        '-Declipse.application=org.eclipse.jdt.ls.core.id1',
-        '-Dosgi.bundles.defaultStartLevel=4',
-        '-Declipse.product=org.eclipse.jdt.ls.core.product',
-        '-Dlog.protocol=true',
-        '-Dlog.level=ALL',
-        '-Xms1g',
-        '-javaagent:' .. jdtls_path .. "/lombok.jar",
-        '--add-modules=ALL-SYSTEM',
-        '--add-opens', 'java.base/java.util=ALL-UNNAMED',
-        '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
-        '-jar', launcher_jar,
-        '-configuration', config_dir,
-        '-data', workspace_dir,
-    },
-    root_dir = root_dir,
-    settings = {
-        java = {
-            signatureHelp = { enabled = true },
-            completion = {
-                enabled = true,
-                favoriteStaticMembers = {
-                    'org.junit.Assert.*',
-                    'org.junit.Assume.*',
-                    'java.util.Objects.*',
-                    'java.util.stream.Collectors.*',
-                },
-                filteredTypes = {
-                    'com.sun.*',
-                    'io.micrometer.*',
-                    'java.awt.*',
-                    'jdk.*',
-                    'sun.*',
-                },
-            },
-            sources = {
-                organizeImports = {
-                    starThreshold = 9999,
-                    staticStarThreshold = 9999,
-                },
-            },
-            codeGeneration = {
-                toString = {
-                    template = '${object.className}{${member.name()}=${member.value}, ${otherMembers}}',
-                },
-                hashCodeEquals = {
-                    useJava7Objects = true,
-                },
-                useBlocks = true,
-            },
-            configuration = {
-                runtimes = {
-                    --[[
+  cmd = {
+    "/usr/lib/jvm/java-21-openjdk-amd64/bin/java",
+    '-Declipse.application=org.eclipse.jdt.ls.core.id1',
+    '-Dosgi.bundles.defaultStartLevel=4',
+    '-Declipse.product=org.eclipse.jdt.ls.core.product',
+    '-Dlog.protocol=true',
+    '-Dlog.level=ALL',
+    '-Xms1g',
+    '-javaagent:' .. jdtls_path .. "/lombok.jar",
+    '--add-modules=ALL-SYSTEM',
+    '--add-opens', 'java.base/java.util=ALL-UNNAMED',
+    '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+    '-jar', launcher_jar,
+    '-configuration', config_dir,
+    '-data', workspace_dir,
+  },
+  root_dir = root_dir,
+  settings = {
+    java = {
+      signatureHelp = { enabled = true },
+      completion = {
+        enabled = true,
+        favoriteStaticMembers = {
+          'org.junit.Assert.*',
+          'org.junit.Assume.*',
+          'java.util.Objects.*',
+          'java.util.stream.Collectors.*',
+        },
+        filteredTypes = {
+          'com.sun.*',
+          'io.micrometer.*',
+          'java.awt.*',
+          'jdk.*',
+          'sun.*',
+        },
+      },
+      sources = {
+        organizeImports = {
+          starThreshold = 9999,
+          staticStarThreshold = 9999,
+        },
+      },
+      codeGeneration = {
+        toString = {
+          template = '${object.className}{${member.name()}=${member.value}, ${otherMembers}}',
+        },
+        hashCodeEquals = {
+          useJava7Objects = true,
+        },
+        useBlocks = true,
+      },
+      configuration = {
+        runtimes = {
+          --[[
                     {
                         name = 'JavaSE-1.8',
                         path = '/path/to/java-8', -- Adjust to your Java 8 path
@@ -88,38 +94,42 @@ local config = {
                         path = '/path/to/java-17', -- Adjust to your Java 17 path
                     },
 --]]
-                },
-            },
         },
+      },
     },
-    init_options = {
-        bundles = {},
-        extendedClientCapabilities = extendedClientCapabilities,
-    },
-    on_attach = function(client, bufnr)
-        -- Enable completion triggered by <c-x><c-o>
-        vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+  },
+  init_options = {
+    bundles = {},
+    extendedClientCapabilities = extendedClientCapabilities,
+  },
+  on_attach = function(client, bufnr)
+    -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-        -- Keymaps for code actions and other LSP features
-        local bufopts = { noremap = true, silent = true, buffer = bufnr }
-        vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts) -- Code actions
+    -- Keymaps for code actions and other LSP features
+    local bufopts = { noremap = true, silent = true, buffer = bufnr }
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts) -- Code actions
 
-        vim.keymap.set("n", "K", function()
-            local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
-            if #diagnostics > 0 then
-                -- Show diagnostic if present
-                vim.diagnostic.open_float(nil, { focus = false })
-            else
-                -- Otherwise show hover info
-                vim.lsp.buf.hover()
-            end
-        end, { desc = "Show diagnostics or hover" })
+    vim.keymap.set("n", "K", function()
+      local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
+      if #diagn > 0 then
+        vim.diagnostic.open_float(nil, {
+          focus = false,
+          border = "rounded",
+          padding = { 40, 60, 40, 60 } -- { top, right, bottom, left }
+        })
+      else
+        vim.lsp.buf.hover({
+          border = "rounded",
+          padding = { 40, 60, 40, 60 } -- { top, right, bottom, left }
+        })
+      end
+    end, { desc = "Show diagnostics or hover" })
 
-
-        -- Add JDTLS-specific commands
-        jdtls.setup.add_commands()
-    end,
-    capabilities = vim.lsp.protocol.make_client_capabilities(),
+    -- Add JDTLS-specific commands
+    jdtls.setup.add_commands()
+  end,
+  capabilities = vim.lsp.protocol.make_client_capabilities(),
 }
 
 -- Start or attach the JDTLS server
