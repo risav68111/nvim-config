@@ -108,20 +108,20 @@ local config = {
 
     -- Keymaps for code actions and other LSP features
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
-    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts) -- Code actions
+    vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)     -- Code actions
 
     vim.keymap.set("n", "K", function()
       local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
-      if #diagn > 0 then
+      if #diagnostics > 0 then
         vim.diagnostic.open_float(nil, {
           focus = false,
           border = "rounded",
-          padding = { 40, 60, 40, 60 } -- { top, right, bottom, left }
+          padding = { 4, 6, 4, 6 }
         })
       else
         vim.lsp.buf.hover({
           border = "rounded",
-          padding = { 40, 60, 40, 60 } -- { top, right, bottom, left }
+          padding = { 4, 6, 4, 6 }
         })
       end
     end, { desc = "Show diagnostics or hover" })
