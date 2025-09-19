@@ -9,6 +9,14 @@ return {
     },
     config = function()
       require("neo-tree").setup({
+        filesystem = {
+          -- Do not auto-open/close Neo-tree
+          follow_current_file = { enabled = false },
+          hijack_netrw_behavior = "disabled", -- don't replace netrw
+        },
+        event_handlers = {
+          -- Remove auto-open on VimEnter
+        },
         window = {
           mappings = {
             ["o"] = {
@@ -22,12 +30,7 @@ return {
         },
       })
 
-      -- Custom background only for Neo-tree
-      vim.api.nvim_set_hl(0, "NeoTreeNormal", { bg = "#13110a" }) -- 1e1e2e
-      vim.api.nvim_set_hl(0, "NeoTreeNormalNC", { bg = "#13110a" })
-      vim.api.nvim_set_hl(0, "NeoTreeEndOfBuffer", { bg = "#13110a" })
-
-      vim.keymap.set("n", "<leader>t", "<cmd>Neotree toggle<CR>", { desc = "Toggle Neo-tree" }) --Toggle
+      vim.keymap.set("n", "<leader>t", "<cmd>Neotree toggle<CR>", { desc = "Toggle Neo-tree" })
     end,
   },
   {
@@ -57,3 +60,4 @@ return {
     end,
   },
 }
+
