@@ -164,6 +164,14 @@ return {
       },
     })
 
+    --To only want defination
+    vim.keymap.set("n", "<leader>k", function()
+      local hover = vim.lsp.buf.hover({
+        border = 'rounded',
+        focus = false,
+      })
+    end)
+
     -- Show diagnostics if under cursor, otherwise LSP hover
     vim.keymap.set("n", "K", function()
       local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
