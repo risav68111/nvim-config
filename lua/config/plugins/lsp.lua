@@ -53,19 +53,11 @@ return {
         "lua_ls",
       },
 
-      -- config = function()
-      --     for lsp in ensure_installed then
-      --         vim.lsp.enable(lsp)
-      --     end
-      -- end,
       handlers = {
         function(server_name) -- default handler (optional)
           if server_name ~= "jdtls" then
             vim.lsp.config(server_name)
           end
-          -- require("lspconfig")[server_name].setup {
-          --     capabilities = capabilities
-          -- }
         end,
 
         zls = function()
@@ -153,5 +145,42 @@ return {
         },
       }),
     })
+
+    --gopls setup
+    local nvim_lsp = require("lspconfig")
+    nvim_lsp.gopls.setup({
+      cmd = { "gopls" },
+      filetypes = { "go", "gomod" },
+      root_dir = require("lspconfig.util").root_pattern("go.mod", ".git"),
+      settings = {
+        gopls = {
+          analyses = {
+            unusedparams = true,
+            nilness = true,
+            unusedwrite = true,
+          },
+          staticcheck = true,
+        },
+      },
+    })
+
+    -- Show diagnostics if under cursor, otherwise LSP hover
+    vim.keymap.set("n", "K", function()
+      local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
+      if #diagnostics > 0 then
+        vim.diagnostic.open_float(nil, {
+          focus = false,
+          border = "rounded",
+          -- padding is not a built-in option, we fake it with width/spacing
+          source = "always",
+        })
+      else
+        vim.lsp.buf.hover({
+          border = "rounded",
+          max_width = 80,
+          max_height = 20,
+        })
+      end
+    end, { desc = "Show diagnostics or hover", silent = true })
   end
 }
