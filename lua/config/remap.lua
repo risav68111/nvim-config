@@ -55,3 +55,11 @@ vim.keymap.set("n", "<A-H>", ":vertical resize -5<CR>")
 vim.keymap.set("n", "<A-K>", ":resize +2<CR>")
 vim.keymap.set("n", "<A-J>", ":resize -2<CR>")
 
+vim.g.netrw_browse_split = 0
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "netrw",
+  callback = function()
+    vim.keymap.set("n", "f", "<Plug>NetrwLocalBrowseCheck", { buffer = true })
+  end,
+})
+
