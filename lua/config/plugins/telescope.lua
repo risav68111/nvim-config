@@ -6,7 +6,20 @@ return {
     dependencies = { 'nvim-lua/plenary.nvim' },
 
     config = function()
-      require('telescope').setup({})
+      require('telescope').setup({
+        defaults = {
+          mappings = {
+            i = {
+              ["<esc>"] = require("telescope.actions").close,               -- Clean exit from prompt
+            },
+          },
+          layout_strategy = "horizontal",           -- Consistent layout to avoid window conflicts
+          layout_config = {
+            width = 0.8,
+            height = 0.8,
+          },
+        },
+      })
 
       local builtin = require('telescope.builtin')
       vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
@@ -15,7 +28,8 @@ return {
       vim.keymap.set('n', '<leader>gf', function()
         local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
         if git_root == nil or git_root == "" or git_root:match("fatal") then
-          vim.notify("🔒 Git not initialized in this directory", vim.log.levels.INFO, { title = "Telescope Git Files" })
+          vim.notify("🔒 Git not initialized in this directory", vim.log.levels.INFO,
+            { title = "Telescope Git Files" })
           return
         end
         builtin.git_files()

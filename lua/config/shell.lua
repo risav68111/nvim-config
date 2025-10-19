@@ -1,5 +1,4 @@
 vim.api.nvim_create_autocmd("FocusLost", {
-  -- saves all files changing windows
   pattern = "*",
   callback = function()
     pcall(vim.cmd, "silent! update")
@@ -33,28 +32,35 @@ end
 -- Set a keymap to toggle comments in Visual Mode
 vim.api.nvim_set_keymap('v', '<leader>mlc', ":lua ToggleMultiLineComment()<CR>", { noremap = true, silent = true })
 
-
 vim.keymap.set("n", "<leader>r", function()
   local filetype = vim.bo.filetype
-  local filename = vim.fn.expand('%:t')   -- Get file name (e.g., "main.java")
-  filepath = vim.fn.expand('%:p')         -- Get full file path
-  local filename = vim.fn.expand('%:t:r') -- Get file name without extension
+  local filename = vim.fn.expand('%:t')
+  local filepath = vim.fn.expand('%:p')
+  local filename_no_ext = vim.fn.expand('%:t:r')
+  local command
 
   if filetype == "java" then
-    vim.cmd("!java " .. filename)
+    command = "java " .. filename
   elseif filetype == "lua" then
-    vim.cmd("!lua " .. filepath)
+    command = "lua " .. filepath
   elseif filetype == "python" then
-    vim.cmd("!python " .. filepath)
+    command = "python " .. filepath
   elseif filetype == "c" then
-    vim.cmd("!gcc " .. filename .. " -o " .. filename_no_ext .. " && ./" .. filename_no_ext)
+    -- Compile and run C code
+    command = "gcc " .. filename .. " -o " .. filename_no_ext .. " && ./" .. filename_no_ext
   elseif filetype == "cpp" then
-    vim.cmd("!g++ " .. filename .. " -o " .. filename_no_ext .. " && ./" .. filename_no_ext)
+    -- Compile and run C++ code
+    command = "g++ " .. filename .. " -o " .. filename_no_ext .. " && ./" .. filename_no_ext
+  elseif filetype == "go" then
+    command = "go run " .. filename
   else
     vim.notify("Unsupported file type: " .. filetype)
+    return
   end
-end, { noremap = true, silent = true })
 
+  -- Use vim.cmd("terminal ...") to run the command in a new terminal buffer
+  vim.cmd("vsplit | terminal " .. command)
+end, { noremap = true, silent = true })
 
 -- Function to check if a package declaration already exists
 local function hasPackage()
@@ -76,35 +82,64 @@ local function hasClass(classname)
   return false
 end
 
+local function file_exists(path, filenames)
+  for _, filename in ipairs(filenames) do
+    if vim.fn.filereadable(path .. "/" .. filename) == 1 then
+      return true
+    end
+  end
+  return false
+end
+
 -- Function to insert package declaration if not present
 local function insertPackage()
-  if hasPackage() then
-    vim.notify("🚨 Package already exists in this file!")
+  if vim.bo.filetype ~= 'java' then
+    vim.notify("File is not java")
     return
   end
 
-  local filepath = vim.fn.expand("%:p:h") -- Get directory path
-  local project_root = vim.fn.getcwd()    -- Assuming Neovim is opened at project root
+  local filepath = vim.fn.expand("%:p:h") -- Absolute directory of current file
 
-  local escaped_root = vim.fn.escape(project_root, "\\")
+  local project_root = vim.fn.getcwd()    -- Project root (assumes opened from project root)
 
-  -- Convert directory path into package name
-  local relative_path = filepath:gsub("^" .. escaped_root .. "[\\/]*", ""):gsub("[\\/]", ".")
-
-  local a = string.find(relative_path, "%.src%.main%.java%.")
-
-  if not a then
-    local filename = vim.fn.expand("%:t")
-    vim.notify("🚨 File: " .. filename .. " is not a project")
-    return;
+  -- Ensure project root ends with a slash
+  if not project_root:match("/$") then
+    project_root = project_root .. "/"
   end
-  local new_str = string.sub(relative_path, a + 15)
-  Result = string.gsub(new_str, "[\\/]", ".")
-  local package_name = Result ~= "" and "package " .. Result .. ";" or ""
+
+  -- vim.notify("root dir: " .. project_root)
+  if not file_exists(project_root, { "pom.xml", "build.gradle" }) then
+    vim.notify("Unable to identify java project root dir")
+    return
+  end
+
+  if hasPackage() then
+    vim.notify("Package already exists in this file!")
+    return
+  end
+
+  -- Normalize paths to forward slashes
+  filepath = filepath:gsub("\\", "/")
+  project_root = project_root:gsub("\\", "/")
+
+  -- Get relative path from project root
+  local relative_path = filepath:gsub("^" .. vim.pesc(project_root), "")
+
+  local package_name = relative_path:match("/java/(.*)")
+
+  if package_name == nil then
+    vim.notify("unable to find package")
+    return
+  end
+
+  package_name = package_name:gsub("/", ".")
+
+  -- Insert package declaration
   if package_name ~= "" then
-    vim.api.nvim_buf_set_lines(0, 0, 0, false, { package_name, "" })
-    local a = string.find(relative_path, "%.src%.main%.java%.")
-    vim.notify("✅ Package inserted successfully!")
+    vim.api.nvim_buf_set_lines(0, 0, 0, false, { "package " .. package_name .. ";", "" })
+    vim.notify("Package inserted: package " .. package_name)
+  else
+    vim.notify("Could not determine package name")
   end
 end
 
@@ -114,12 +149,12 @@ local function insertClass()
   local classname = filename:gsub("%.java$", "") -- Remove .java extension
 
   if vim.bo.filetype ~= 'java' then
-    vim.notify("🚨 File is not java")
+    vim.notify("File is not java")
     return
   end
 
   if hasClass(classname) then
-    vim.notify("🚨 Class '" .. classname .. "' already exists in this file!")
+    vim.notify("Class '" .. classname .. "' already exists in this file!")
     return
   end
 
@@ -132,7 +167,7 @@ local function insertClass()
 
   -- Insert the class template
   vim.api.nvim_buf_set_lines(0, -1, -1, false, template)
-  vim.notify("✅ Class inserted successfully!")
+  vim.notify("Class inserted successfully!")
 end
 
 -- Function to insert both package & class safely
@@ -148,7 +183,7 @@ vim.api.nvim_create_user_command("Ins", insert_full, {})
 
 
 local function insertReact()
-  local filename = vim.fn.expand("%:t")        -- Get file name
+  local filename = vim.fn.expand("%:t")           -- Get file name
   local filename_na = filename:gsub("%.jsx$", "") -- Remove .java extension
 
   -- Java class template
@@ -165,7 +200,7 @@ local function insertReact()
 
   -- Insert the class template
   vim.api.nvim_buf_set_lines(0, -1, -1, false, template)
-  vim.notify("✅ RAFC inserted successfully!")
+  vim.notify("RAFC inserted successfully!")
 end
 
 vim.api.nvim_create_user_command("Rafc", insertReact, {})
