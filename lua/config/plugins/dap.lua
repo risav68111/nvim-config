@@ -18,9 +18,9 @@ return {
       -- Keymaps
       vim.keymap.set("n", "<F4>", dap.toggle_breakpoint)
       vim.keymap.set("n", "<F5>", dap.continue)
-      vim.keymap.set("n", "<F10>", dap.step_over)
-      vim.keymap.set("n", "<F11>", dap.step_into)
-      vim.keymap.set("n", "<S-F11>", dap.step_out)
+      vim.keymap.set("n", "<F6>", dap.step_over)
+      vim.keymap.set("n", "<S-F6>", dap.step_into)
+      vim.keymap.set("n", "<S-F7>", dap.step_out)
       vim.keymap.set("n", "<leader>dx", dap.terminate)
       vim.keymap.set("n", "<leader>du", dapui.toggle)
     end,

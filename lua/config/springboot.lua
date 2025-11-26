@@ -31,6 +31,7 @@ function M.run_springboot()
   -- Determine whether to use mvnw or mvn
   local mvnw_exists = file_exists("./mvnw")
   local cmd = mvnw_exists and { "./mvnw", "spring-boot:run" } or { "mvn", "spring-boot:run" }
+  print("done")
 
   -- Create a new tab and terminal buffer
   vim.cmd("wa")

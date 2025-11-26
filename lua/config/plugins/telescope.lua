@@ -48,7 +48,7 @@ return {
 
 
       vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
-      vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+      vim.keymap.set('n', '<leader>bf', builtin.buffers, { desc = 'Telescope buffers' })
       vim.keymap.set('n', '<leader>vh', builtin.help_tags, {})
       vim.keymap.set('v', '<leader>fs', function()
         local text = vim.fn.getreg("v")

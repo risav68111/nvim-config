@@ -1,6 +1,6 @@
 local jdtls = require('jdtls')
 local jdtls_setup = require('jdtls.setup')
-local java_path = '/usr/lib/jvm/java-21-openjdk-amd64'
+local java_path = '/usr/lib/jvm/java-21-openjdk'
 
 -- Path to your Java installations
 local home = os.getenv('HOME')
