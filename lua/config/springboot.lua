@@ -17,29 +17,30 @@ local function file_contains(path, pattern)
   return false
 end
 
--- Helper: determine if it's a Spring Boot project
-local function is_springboot_project()
-  return file_contains("pom.xml", "spring%-boot") or file_contains("build.gradle", "spring%-boot")
-end
+function M.run()
+  -- Detect Spring Boot
+  local is_springboot =
+    file_contains("pom.xml", "spring%-boot")
+    or file_contains("build.gradle", "spring%-boot")
 
-function M.run_springboot()
-  if not is_springboot_project() then
-    vim.notify("Not a Spring Boot project.", vim.log.levels.WARN)
-    return
+  if is_springboot then
+    local mvnw_exists = file_exists("./mvnw")
+    cmd = mvnw_exists
+      and { "./mvnw", "spring-boot:run" }
+      or { "mvn", "spring-boot:run" }
+  else
+    cmd = "mvn clean compile exec:java"
   end
 
-  -- Determine whether to use mvnw or mvn
-  local mvnw_exists = file_exists("./mvnw")
-  local cmd = mvnw_exists and { "./mvnw", "spring-boot:run" } or { "mvn", "spring-boot:run" }
-  print("done")
-
-  -- Create a new tab and terminal buffer
   vim.cmd("wa")
+
+  -- Open terminal in current window
   local buf = vim.api.nvim_create_buf(true, false)
   vim.api.nvim_win_set_buf(0, buf)
 
   vim.fn.termopen(cmd)
   vim.cmd("startinsert")
 end
+
 
 return M
