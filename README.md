@@ -1,21 +1,20 @@
 
-# 🧠 My frankenstein nvim setup:
-
+# Frankenstein nvim setup:
 
 This is my personal Neovim configuration got configuration from others developers nvim config and modified according to my needs. It includes custom keybindings, personal cheatsheets, and Lua-based plugin management.
 
 ---
 
-## 🚀 Features
+## Features
 
 - Fast and minimal configuration
-- LSP setup for Java, Python, JavaScript
-- Harpoon, Telescope, UndoTree, Git support
+- LSP setup for Java, Python, JavaScript, Golang
+- Harpoon, Telescope, UndoTree, Git support, etc
 - Custom shortcuts and cheat commands for efficient workflow
 
 ---
 
-## ✅ Requirements
+## Requirements
 
 Make sure the following tools are installed before proceeding:
 
@@ -32,9 +31,9 @@ Make sure the following tools are installed before proceeding:
 | [Git](https://git-scm.com/)                      | For cloning the configuration repo               |
 |--------------------------------------------------|--------------------------------------------------|
 
-## 📥 Installation
+##  Installation
 
-You can install this configuration using GitHub CLI or by downloading the repository as a ZIP file.
+You can install this configuration using Git/GitHub CLI or by downloading the repository as a ZIP file.
 
 Files will go inside the following folder location according to the OS.
 ---
@@ -50,15 +49,15 @@ C:\Users\<YourUsername>\AppData\Local\nvim\
 
 File setup inside nvim folder:
 ```
-ftplugin/
 nvim/
+ └── ftplugin/
  └── lua/
      └── config/
-init.lua
+ └── init.lua
 ```
 ---
 
-## 🧪 Launch Neovim
+##  Launch Neovim
 
 After completing the setup, open Neovim to ensure everything is working correctly:
 
@@ -71,10 +70,25 @@ If the plugins don’t install automatically, run the following command inside N
 ```vim
 :Lazy sync
 ```
+Also You have to Manually install LSP for each Language. Use Mason for downloading LSP.
+```
+:Mason
+```
+
+LSP:
+- jdtls
+- eslint
+- gopls
+- pyright
+- lua_ls 
+
+Debug/Testing:
+- java-debug-adapter 
+- java-test 
 
 ---
 
-## 🔧 Customize
+## Customize
 
 - All configuration files are located inside `lua/config/`.
 - You can modify keybindings, add custom settings, or install additional plugins by editing the files in this directory.
@@ -82,7 +96,7 @@ If the plugins don’t install automatically, run the following command inside N
 
 ---
 
-## 📄 License
+## License
 
 This configuration is for **personal use** and is shared for learning and reference purposes.
 ```

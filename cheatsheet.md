@@ -101,8 +101,30 @@
 `<leader>ca`          → Code Actions (quick fix, organize imports)  
 `<leader>gs`          → Generate Getters & Setters  
 `<leader>gc`          → Generate Constructor  
-`<leader>gt`          → Generate toString()`  
+`<leader>gt`          → Generate toString()  
   
-  
-Neovim is now set up and ready to use! 🚀
+
+
+## Java DAP SHORTCUTS
+`<F4>`                → Toggle Breakpoint
+`<F5>`                → Continue
+`<F6>`                → Step Over
+`<S-F6>`              → Step Into
+`<S-F7>`              → Step Out
+`<leader>dx`          → Terminate
+`<leader>du`          → UI Toggle
+
+## Custom keybinds and commands to perform task
+`:Ins`                → Insert both package name line class lines if java its java file
+`:Insc`               → Insert class lines if java its java file
+`:Insp`               → Insert package lines if java its java file
+`<leader>r`           → Exect terminal simple file only for c, c++, java, python, go and bash
+
+
+###if jdtls sometime breaks and gives error 13 etc run below command to clear cache
+
+```
+rm -rf ~/.cache/jdtls ~/.local/share/jdtls
+```
+then reopen project in nvim
 
