@@ -32,7 +32,7 @@ end
 -- Set a keymap to toggle comments in Visual Mode
 vim.api.nvim_set_keymap('v', '<leader>mlc', ":lua ToggleMultiLineComment()<CR>", { noremap = true, silent = true })
 
-vim.keymap.set("n", "<leader>r", function()
+vim.api.nvim_create_user_command("Run", function()
   local filetype = vim.bo.filetype
   local filename = vim.fn.expand('%:t')
   local filepath = vim.fn.expand('%:p')
@@ -53,6 +53,8 @@ vim.keymap.set("n", "<leader>r", function()
     command = "g++ " .. filename .. " -o " .. filename_no_ext .. " && ./" .. filename_no_ext
   elseif filetype == "go" then
     command = "go run " .. filename
+  elseif filetype == "sh" then
+    command = "bash " .. filename
   else
     vim.notify("Unsupported file type: " .. filetype)
     return
@@ -60,7 +62,7 @@ vim.keymap.set("n", "<leader>r", function()
 
   -- Use vim.cmd("terminal ...") to run the command in a new terminal buffer
   vim.cmd("vsplit | terminal " .. command)
-end, { noremap = true, silent = true })
+end, {})
 
 -- Function to check if a package declaration already exists
 local function hasPackage()
@@ -204,3 +206,34 @@ local function insertReact()
 end
 
 vim.api.nvim_create_user_command("Rafc", insertReact, {})
+
+vim.api.nvim_create_user_command("Gorun", function()
+  local cmd
+
+  -- Detect Go module
+  local has_go_mod = vim.fn.filereadable("go.mod") == 1
+
+  if has_go_mod then
+    cmd = { "go", "run", "." }
+  else
+    local file = vim.fn.expand("%")
+    if file == "" then
+      vim.notify("No Go file to run", vim.log.levels.ERROR)
+      return
+    end
+    cmd = { "go", "run", file }
+  end
+
+  -- Save all files
+  vim.cmd("wa")
+
+  -- Vertical split
+  vim.cmd("split")
+
+  -- Create terminal buffer in the new split
+  local buf = vim.api.nvim_create_buf(true, false)
+  vim.api.nvim_win_set_buf(0, buf)
+
+  vim.fn.termopen(cmd)
+  vim.cmd("startinsert")
+end, {})
