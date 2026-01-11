@@ -11,12 +11,12 @@ local config_dir = jdtls_path .. '/config_linux'
 -- Workspace directory for JDTLS data
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 local workspace_dir = home .. '/.cache/jdtls/workspace/' .. project_name
+local mason_path = home .. "/.local/share/nvim/mason/"
 
 -- Root markers to detect Java projects
 local root_markers = { '.git', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' }
 local root_dir = jdtls_setup.find_root(root_markers)
 
-local mason_path = home .. "/.local/share/nvim/mason/"
 local bundles = {}
 vim.list_extend(bundles, vim.split(vim.fn.glob(mason_path .. "packages/java-test/extension/server/*.jar"), "\n"))
 vim.list_extend(bundles,
@@ -156,7 +156,6 @@ local config = {
         else
           print("ERROR: jdtls.dap is still nil after setup_dap")
           -- Check if bundles exist
-          local mason_path = home .. "/.local/share/nvim/mason/"
           local java_test_bundles = vim.split(vim.fn.glob(mason_path .. "packages/java-test/extension/server/*.jar"),
             "\n")
           local java_debug_bundles = vim.split(
