@@ -6,7 +6,8 @@ local java_path = "C:/Java/jdk-21" -- my java dir <-- change this according to y
 
 -- Mason/JDTLS paths
 local home = os.getenv("USERPROFILE")
-local jdtls_path = home .. "/AppData/Local/nvim-data/mason/packages/jdtls"
+local mason_path = home .. "/AppData/Local/nvim-data/mason/"
+local jdtls_path = mason_path .. "/packages/jdtls"
 
 -- Launcher JAR
 local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar")
@@ -23,7 +24,6 @@ local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
 local root_dir = jdtls_setup.find_root(root_markers)
 
 -- Bundles
-local mason_path = home .. "/AppData/Local/nvim-data/mason/"
 local bundles = {}
 
 vim.list_extend(bundles, vim.split(
