@@ -114,6 +114,9 @@ local config = {
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
 
+    -- refactor the variables
+    vim.keymap.set("n", "<leader>rf", vim.lsp.buf.rename, bufopts)
+
     vim.keymap.set("n", "K", function()
       local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
       if #diagnostics > 0 then
