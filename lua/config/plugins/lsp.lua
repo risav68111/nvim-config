@@ -51,13 +51,31 @@ return {
     require("mason-lspconfig").setup({
       ensure_installed = {
         "lua_ls",
+        "emmet_ls"
       },
 
       handlers = {
         function(server_name) -- default handler (optional)
           if server_name ~= "jdtls" then
-            vim.lsp.config(server_name)
+            -- vim.lsp.config(server_name)
+            require("lspconfig")[server_name].setup({
+              capabilities = capabilities,
+            })
           end
+        end,
+
+        html = function()
+          require("lspconfig").html.setup({
+            capabilities = capabilities,
+            filetypes = { "html", "templ" },
+          })
+        end,
+
+        emmet_ls = function()
+          require("lspconfig").emmet_ls.setup({
+            capabilities = capabilities,
+            filetypes = { "html", "css", "javascriptreact" },
+          })
         end,
 
         zls = function()
@@ -96,6 +114,8 @@ return {
         end,
       }
     })
+
+    require("luasnip.loaders.from_vscode").lazy_load()
 
     local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
