@@ -13,4 +13,4 @@ vim.api.nvim_create_autocmd('TextYankPost', {
     end,
 })
 
-vim.opt.runtimepath:remove("/usr/lib/nvim")
+-- vim.opt.runtimepath:remove("/usr/lib/nvim")
