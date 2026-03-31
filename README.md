@@ -22,7 +22,7 @@ Make sure the following tools are installed before proceeding:
 |``````````````````````````````````````````````````|``````````````````````````````````````````````````|
 | Tool                                             | Description                                      |
 |``````````````````````````````````````````````````|``````````````````````````````````````````````````|
-| [Neovim](https://neovim.io/) 0.9+                | Code editor (required)                           |
+| [Neovim](https://neovim.io/) 0.11+ (11.7)        | Code editor (required)                           |
 |--------------------------------------------------|--------------------------------------------------|
 | [Ripgrep](https://github.com/BurntSushi/ripgrep) | Fast file search for Telescope                   |
 |--------------------------------------------------|--------------------------------------------------|
@@ -81,6 +81,7 @@ LSP:
 - gopls
 - pyright
 - lua_ls 
+- ts_ls
 
 Debug/Testing:
 - java-debug-adapter 
@@ -93,6 +94,7 @@ Debug/Testing:
 - All configuration files are located inside `lua/config/`.
 - You can modify keybindings, add custom settings, or install additional plugins by editing the files in this directory.
 - Refer to the included `cheatsheet.md` file for keybindings and commands specific to this setup.
+- The keymaps and other config(s) is my personal prefence.  
 
 ---
 

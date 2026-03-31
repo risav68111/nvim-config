@@ -12,3 +12,5 @@ vim.api.nvim_create_autocmd('TextYankPost', {
         vim.highlight.on_yank()
     end,
 })
+
+vim.opt.runtimepath:remove("/usr/lib/nvim")

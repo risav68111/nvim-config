@@ -184,6 +184,8 @@ return {
       },
     })
 
+    -- refactor the variables
+    eim.keymap.set("n", "<leader>rf", vim.lsp.buf.rename, bufopts)
     --To only want defination
     vim.keymap.set("n", "<leader>k", function()
       local hover = vim.lsp.buf.hover({

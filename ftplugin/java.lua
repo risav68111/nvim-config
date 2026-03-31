@@ -114,7 +114,6 @@ local config = {
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
     vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, bufopts)
 
-    -- refactor the variables
     vim.keymap.set("n", "<leader>rf", vim.lsp.buf.rename, bufopts)
 
     vim.keymap.set("n", "K", function()

@@ -102,7 +102,10 @@
 `<leader>gs`          → Generate Getters & Setters  
 `<leader>gc`          → Generate Constructor  
 `<leader>gt`          → Generate toString()  
-  
+ 
+
+## LSP SHORTCUTS
+`<leader>rf`          → Refactor
 
 
 ## Java DAP SHORTCUTS
@@ -118,7 +121,7 @@
 `:Ins`                → Insert both package name line class lines if java its java file
 `:Insc`               → Insert class lines if java its java file
 `:Insp`               → Insert package lines if java its java file
-`<leader>r`           → Exect terminal simple file only for c, c++, java, python, go and bash
+`:Run`                → Exect terminal simple file only for c, c++, java, python, go and bash
 
 
 ###if jdtls sometime breaks and gives error 13 etc run below command to clear cache
