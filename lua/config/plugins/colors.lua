@@ -92,14 +92,15 @@ return {
       vim.opt.guicursor = {
         "n:block-CursorNormal",
         "v:block-CursorVisual",
-        "i:block-CursorInsert",
+        -- "i:block-CursorInsert",
+        "i:ver25-CursorInsert-blinkwait1000-blinkon2000-blinkoff200",
         "r-cr:block-CursorReplace",
         "c:block-CursorCommand",
       }
 
       require('mfd').enable_cursor_sync()
 
-      ColorMyPencils("mfd-flir-fusion")
+      ColorMyPencils() -- "mfd-flir-fusion"
     end,
   }
 }
