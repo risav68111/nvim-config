@@ -15,33 +15,13 @@ local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.lau
 -- Platform config dir
 local config_dir = jdtls_path .. "/config_win"
 
--- Root directory
-local root_markers = {
-  ".git",
-  "mvnw",
-  "mvnw.cmd",
-  "gradlew",
-  "gradlew.bat",
-  "pom.xml",
-  "build.gradle",
-  "settings.gradle",
-}
-
-local root_dir = jdtls_setup.find_root(root_markers)
--- if not root_dir then
---   vim.notify("JDTLS: root_dir not found", vim.log.levels.ERROR)
---   root_dir = vim.fn.getcwd()
---   vim.notify(root_dir);
--- end
-if not root_dir then
-  return
-end
-
 -- Workspace
--- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
--- local workspace_dir = home .. "/jdtls-workspaces/" .. project_name
-local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
-local workspace_dir = home .. "/jdtls-workspaces/" .. vim.fn.sha256(root_dir)
+local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ":p:h:t")
+local workspace_dir = home .. "/jdtls-workspaces/" .. project_name
+
+-- Root directory
+local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
+local root_dir = jdtls_setup.find_root(root_markers)
 
 -- Bundles
 local bundles = {}
@@ -150,7 +130,6 @@ local config = {
 
     local bufopts = { noremap = true, silent = true, buffer = bufnr }
     vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, bufopts)
-    -- vim.keymap.set("n", "<leader>rf", vim.lsp.buf.rename, bufopts)
 
     vim.keymap.set("n", "K", function()
       local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line(".") - 1 })
@@ -170,23 +149,42 @@ local config = {
 
     jdtls.setup.add_commands()
 
-    jdtls.setup_dap({ hotcodereplace = "auto" })
-    jdtls.setup.add_commands()
+    vim.defer_fn(function()
+      print("=== JDTLS DAP DEBUG ===")
+      print("jdtls type:", type(jdtls))
+      print("jdtls.setup_dap available:", jdtls.setup_dap ~= nil)
 
-    vim.keymap.set("n", "<leader>dt", jdtls.dap.test_class, bufopts)
-    vim.keymap.set("n", "<leader>dT", jdtls.dap.test_nearest_method, bufopts)
-    vim.keymap.set("n", "<leader>dc", jdtls.dap.run_config, bufopts)
+      if jdtls.setup_dap then
+        print("Calling setup_dap...")
+        jdtls.setup_dap({ hotcodereplace = "auto" })
+
+        if jdtls.dap then
+          print("DAP loaded:", vim.inspect(vim.tbl_keys(jdtls.dap)))
+          vim.keymap.set("n", "<leader>dt", jdtls.dap.test_class, bufopts)
+          vim.keymap.set("n", "<leader>dT", jdtls.dap.test_nearest_method, bufopts)
+          vim.keymap.set("n", "<leader>dc", jdtls.dap.run_config, bufopts)
+          vim.notify("JDTLS DAP setup successful")
+        else
+          print("ERROR: jdtls.dap is NIL after setup_dap")
+        end
+      else
+        print("ERROR: jdtls.setup_dap not found")
+      end
+    end, 1000)
   end,
 
   capabilities = require("cmp_nvim_lsp").default_capabilities(),
 }
 
--- jdtls.start_or_attach(config)
+
+jdtls.start_or_attach(config)
+
+
 
 -- Autocommand to ensure JDTLS attaches on FileType java
-vim.api.nvim_create_autocmd('FileType', {
-  pattern = 'java',
-  callback = function()
-    jdtls.start_or_attach(config)
-  end,
-})
+-- vim.api.nvim_create_autocmd('FileType', {
+--     pattern = 'java',
+--     callback = function()
+--         jdtls.start_or_attach(config)
+--     end,
+-- })

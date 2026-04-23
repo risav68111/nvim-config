@@ -59,7 +59,8 @@ vim.api.nvim_create_user_command("Run", function()
   end
 
   -- Use vim.cmd("terminal ...") to run the command in a new terminal buffer
-  vim.cmd("vsplit | terminal " .. command) end, {})
+  vim.cmd("vsplit | terminal " .. command)
+end, {})
 
 -- Function to check if a package declaration already exists
 local function hasPackage()
