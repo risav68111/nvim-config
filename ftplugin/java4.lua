@@ -1,22 +1,22 @@
 local jdtls = require('jdtls')
 local jdtls_setup = require('jdtls.setup')
 local java_path = '/usr/lib/jvm/java-21-openjdk'
-local java_cmd = vim.fn.exepath("java")
-local java_home = vim.fn.fnamemodify(java_cmd, ":h:h")
 
 -- Path to your Java installations
 local home = os.getenv('HOME')
 local jdtls_path = home .. '/.local/share/nvim/mason/packages/jdtls'
-local launcher_jar = vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar', 1)
+local launcher_jar = vim.fn.glob(jdtls_path .. '/plugins/org.eclipse.equinox.launcher_*.jar')
 local config_dir = jdtls_path .. '/config_linux'
 
 -- Workspace directory for JDTLS data
 local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 local workspace_dir = home .. '/.cache/jdtls/workspace/' .. project_name
+local mason_path = home .. "/.local/share/nvim/mason/"
 
 -- Root markers to detect Java projects
+local root_markers = { '.git', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' }
+local root_dir = jdtls_setup.find_root(root_markers)
 
-local mason_path = home .. "/.local/share/nvim/mason/"
 local bundles = {}
 vim.list_extend(bundles, vim.split(vim.fn.glob(mason_path .. "packages/java-test/extension/server/*.jar"), "\n"))
 vim.list_extend(bundles,
@@ -37,17 +37,10 @@ vim.bo.shiftwidth = 4
 vim.bo.softtabstop = 4
 vim.bo.expandtab = true
 
-local root_markers = { '.git', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' }
-local root_dir = jdtls_setup.find_root(root_markers)
-if root_dir == nil then
-  return
-end
-
 -- JDTLS configuration
 local config = {
-  single_file_support = false,
   cmd = {
-    java_cmd,
+    java_path .. "/bin/java",
     '-Declipse.application=org.eclipse.jdt.ls.core.id1',
     '-Dosgi.bundles.defaultStartLevel=4',
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
@@ -102,7 +95,7 @@ local config = {
       runtimes = {
         {
           name = 'JavaSE-21',
-          path = java_home,
+          path = java_path .. "/",
           default = true,
         },
       },
