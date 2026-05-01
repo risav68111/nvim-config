@@ -40,7 +40,7 @@ vim.api.nvim_create_user_command("Run", function()
   local command
 
   if filetype == "java" then
-    command = "java " .. filename
+    command = "java " .. filepath
   elseif filetype == "lua" then
     command = "lua " .. filepath
   elseif filetype == "python" then
@@ -52,16 +52,16 @@ vim.api.nvim_create_user_command("Run", function()
     -- Compile and run C++ code
     command = "g++ " .. filename .. " -o " .. filename_no_ext .. " && ./" .. filename_no_ext
   elseif filetype == "go" then
-    command = "go run " .. filename
+    command = "go run " .. filepath
   elseif filetype == "sh" then
-    command = "bash " .. filename
+    command = "bash " .. filepath
   else
     vim.notify("Unsupported file type: " .. filetype)
     return
   end
 
   -- Use vim.cmd("terminal ...") to run the command in a new terminal buffer
-  vim.cmd("vsplit | terminal " .. command)
+  vim.cmd("split | terminal " .. command)
 end, {})
 
 -- Function to check if a package declaration already exists
@@ -183,7 +183,6 @@ vim.api.nvim_create_user_command("Insp", insertPackage, {})
 vim.api.nvim_create_user_command("Insc", insertClass, {})
 vim.api.nvim_create_user_command("Ins", insert_full, {})
 
-
 local function insertReact()
   local filename = vim.fn.expand("%:t")           -- Get file name
   local filename_na = filename:gsub("%.jsx$", "") -- Remove .java extension
@@ -237,3 +236,88 @@ vim.api.nvim_create_user_command("Gorun", function()
   vim.fn.termopen(cmd)
   vim.cmd("startinsert")
 end, {})
+
+
+local function cfBasicSturctInputJava()
+  local filename = vim.fn.expand("%:t")
+  local classname = filename:gsub("%.java$", "")
+
+  if vim.bo.filetype ~= 'java' then
+    vim.notify("File is not java")
+    return
+  end
+
+  if hasClass(classname) then
+    vim.notify("Class '" .. classname .. "' already exists in this file!")
+    return
+  end
+
+  local template = {
+    "import java.io.BufferedReader;",
+    "import java.io.IOException;",
+    "import java.io.InputStreamReader;",
+    "import java.io.PrintWriter;",
+    "public class " .. classname .. " {",
+    "    private static final PrintWriter out = new  PrintWriter(System.out);",
+    "    public static void main(String[] args) throws IOException {",
+    "        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));",
+    "        int t = Integer.parseInt(in.readLine());",
+    "        while (t-->0) {",
+    "        }",
+    "        in.close();",
+    "    }",
+    "}"
+  }
+
+  vim.api.nvim_buf_set_lines(0, -1, -1, false, template)
+  vim.notify("CodeForce Basic code Structure inserted successfully!")
+end
+
+vim.api.nvim_create_user_command("Cfjava", cfBasicSturctInputJava, {})
+
+local function cfBasicSturctInputGo()
+  local filename = vim.fn.expand(":%t")
+  local className = filename:gsub("%.go$", "")
+  if vim.bo.filetype ~= "go" then
+    vim.notify("Not a Go File")
+    return
+  end
+
+  for _, line in ipairs(vim.api.nvim_buf_get_lines(0, 0, -1, false)) do
+    if line:match("^func%s+main%s*%{$|^func%s+" .. className .. "%s*%{$") then
+      vim.notify("file already contain func with `main` or with `" .. className .. "`")
+      return
+    end
+  end
+
+  local template = {
+    "package main",
+    "",
+    "import (",
+    "\t\"bufio\"",
+    "\t\"os\"",
+    "\t\"strconv\"",
+    "\t\"strings\"",
+    ")",
+    "",
+    "func main() {",
+    "\tsc := bufio.NewReader(os.Stdin)",
+    "\tinput, err := sc.ReadString('\\n')",
+    "\tif err != nil {",
+    "\t\tpanic(err)",
+    "\t}",
+    "\tinput = strings.TrimSpace(input)",
+    "\tq, err := strconv.ParseInt(input, 10, 64)",
+    "\tif err != nil {",
+    "\t\tpanic(err)",
+    "\t}",
+    "\tfor q > 0 {",
+    "\t\tq--",
+    "\t}",
+    "}",
+  }
+  vim.api.nvim_buf_set_lines(0, -1, -1, false, template)
+  vim.notify("Go Basic struct is added")
+end
+
+vim.api.nvim_create_user_command("Cfgo", cfBasicSturctInputGo, {})
