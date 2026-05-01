@@ -1,46 +1,60 @@
 return {
+  {
     "nvim-treesitter/nvim-treesitter",
-    build = ':TSUpdate',
-    config = function()
-        require("nvim-treesitter.configs").setup({
-            -- A list of parser names, or "all"
-            ensure_installed = {
-                "vimdoc", "javascript", "typescript", "c", "lua",
-                "jsdoc", "bash", "java"
-            },
+    build = ":TSUpdate",
+    branch = 'master',
+    -- commit = "v0.9.3",
+    opts = {
+      ensure_installed = {
+        "vimdoc", "javascript", "typescript",
+        "c", "lua", "rust", "jsdoc", "bash",
+        "markdown", "markdown_inline",
+      },
 
-            -- Install parsers synchronously (only applied to `ensure_installed`)
-            sync_install = false,
+      sync_install = false,
+      auto_install = true,
 
-            -- Automatically install missing parsers when entering buffer
-            -- Recommendation: set to false if you don"t have `tree-sitter` CLI installed locally
-            auto_install = true,
+      indent = {
+        enable = true,
+      },
 
-            indent = {
-                enable = true
-            },
+      highlight = {
+        enable = true,
+        additional_vim_regex_highlighting = false,
+      },
+    },
 
-            highlight = {
-                -- `false` will disable the whole extension
-                enable = true,
+    config = function(_, opts)
+      require("nvim-treesitter.configs").setup(opts)
 
-                -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-                -- Set this to `true` if you depend on "syntax" being enabled (like for indentation).
-                -- Using this option may slow down your editor, and you may see some duplicate highlights.
-                -- Instead of true it can also be a list of languages
-                additional_vim_regex_highlighting = { "markdown" },
-            },
-        })
+      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+      parser_config.templ = {
+        install_info = {
+          url = "https://github.com/vrischmann/tree-sitter-templ.git",
+          files = { "src/parser.c", "src/scanner.c" },
+          branch = "master",
+        },
+      }
 
-        local treesitter_parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-        treesitter_parser_config.templ = {
-            install_info = {
-                url = "https://github.com/vrischmann/tree-sitter-templ.git",
-                files = {"src/parser.c", "src/scanner.c"},
-                branch = "master",
-            },
-        }
+      vim.treesitter.language.register("templ", "templ")
 
-        vim.treesitter.language.register("templ", "templ")
-    end
+      -- Stop treesitter in float windows (fixes 0.12 injection crash)
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        callback = function(args)
+          vim.schedule(function()
+            -- buf may have been wiped already
+            if not vim.api.nvim_buf_is_valid(args.buf) then return end
+            local wins = vim.fn.win_findbuf(args.buf)
+            for _, win in ipairs(wins) do
+              if vim.api.nvim_win_is_valid(win)
+                  and vim.api.nvim_win_get_config(win).relative ~= "" then
+                pcall(vim.treesitter.stop, args.buf)
+                return
+              end
+            end
+          end)
+        end,
+      })
+    end,
+  },
 }
