@@ -14,3 +14,4 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 })
 
 -- vim.opt.runtimepath:remove("/usr/lib/nvim")
+vim.treesitter.language.add("go")
