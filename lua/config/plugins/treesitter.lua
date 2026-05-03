@@ -2,8 +2,8 @@ return {
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
-    branch = 'master',
-    -- commit = "v0.9.3",
+    branch = "master",
+    -- commit = "90cd658",
     opts = {
       ensure_installed = {
         "vimdoc", "javascript", "typescript",
@@ -37,24 +37,6 @@ return {
       }
 
       vim.treesitter.language.register("templ", "templ")
-
-      -- Stop treesitter in float windows (fixes 0.12 injection crash)
-      vim.api.nvim_create_autocmd("BufWinEnter", {
-        callback = function(args)
-          vim.schedule(function()
-            -- buf may have been wiped already
-            if not vim.api.nvim_buf_is_valid(args.buf) then return end
-            local wins = vim.fn.win_findbuf(args.buf)
-            for _, win in ipairs(wins) do
-              if vim.api.nvim_win_is_valid(win)
-                  and vim.api.nvim_win_get_config(win).relative ~= "" then
-                pcall(vim.treesitter.stop, args.buf)
-                return
-              end
-            end
-          end)
-        end,
-      })
     end,
   },
 }

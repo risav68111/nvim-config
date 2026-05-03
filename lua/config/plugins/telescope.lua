@@ -8,6 +8,9 @@ return {
     config = function()
       require('telescope').setup({
         defaults = {
+          preview = {
+            treesitter = false,
+          },
           mappings = {
             i = {
               ["<esc>"] = require("telescope.actions").close,               -- Clean exit from prompt
@@ -28,7 +31,7 @@ return {
       vim.keymap.set('n', '<leader>gf', function()
         local git_root = vim.fn.systemlist("git rev-parse --show-toplevel")[1]
         if git_root == nil or git_root == "" or git_root:match("fatal") then
-          vim.notify("🔒 Git not initialized in this directory", vim.log.levels.INFO,
+          vim.notify("Git not initialized in this directory", vim.log.levels.INFO,
             { title = "Telescope Git Files" })
           return
         end
