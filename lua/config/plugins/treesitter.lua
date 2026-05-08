@@ -37,6 +37,21 @@ return {
       }
 
       vim.treesitter.language.register("templ", "templ")
+
+      vim.api.nvim_create_autocmd("BufWinEnter", {
+        callback = function(args)
+          vim.schedule(function()
+            if not vim.api.nvim_buf_is_valid(args.buf) then return end
+            for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
+              if vim.api.nvim_win_is_valid(win)
+                  and vim.api.nvim_win_get_config(win).relative ~= "" then
+                pcall(vim.treesitter.stop, args.buf)
+                return
+              end
+            end
+          end)
+        end,
+      })
     end,
   },
 }

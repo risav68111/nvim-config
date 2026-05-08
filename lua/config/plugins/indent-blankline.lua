@@ -17,7 +17,7 @@ return {
   {
     "nvim-treesitter/nvim-treesitter-context",
     opts = {
-      enable = true,            -- Show function/class name at top
+      enable = false,            -- Show function/class name at top
       throttle = true,
       max_lines = 3,            -- Max lines of context to show
       multiline_threshold = 20,

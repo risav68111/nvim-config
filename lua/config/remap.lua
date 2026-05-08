@@ -58,6 +58,9 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-local springboot= require('config.springboot')
+local springboot = require('config.springboot')
 
 vim.keymap.set("n", "<F10>", springboot.run, { desc = "Run Java App" })
+
+vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+vim.keymap.set('n', '<leader>rf', vim.lsp.buf.rename, opts)
