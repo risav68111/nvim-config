@@ -34,3 +34,9 @@ vim.opt.smartcase = true
 -- vim.opt.list= true
 -- vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
+vim.lsp.config('*',
+    { handlers = { ['textDocument/hover'] = function(err, result, ctx, config)
+        config = vim.tbl_deep_extend("force", config or {},
+            { border = border, padding = { top = 1, bottom = 1, left = 2, right = 2 }, })
+        vim.lsp.handlers.hover(err, result, ctx, config)
+    end, } })
