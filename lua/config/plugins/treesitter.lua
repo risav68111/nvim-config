@@ -1,3 +1,5 @@
+local _lsp_float_active = false -- flag must be outside the return {}
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
@@ -21,11 +23,17 @@ return {
       highlight = {
         enable = true,
         additional_vim_regex_highlighting = false,
+        disable = function(lang, bufnr)
+          return _lsp_float_active
+        end,
       },
     },
 
     config = function(_, opts)
       require("nvim-treesitter.configs").setup(opts)
+
+      vim.treesitter.query.set("markdown", "injections", "")
+      vim.treesitter.query.set("markdown_inline", "injections", "")
 
       local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
       parser_config.templ = {
@@ -38,20 +46,20 @@ return {
 
       vim.treesitter.language.register("templ", "templ")
 
-      vim.api.nvim_create_autocmd("BufWinEnter", {
-        callback = function(args)
-          vim.schedule(function()
-            if not vim.api.nvim_buf_is_valid(args.buf) then return end
-            for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
-              if vim.api.nvim_win_is_valid(win)
-                  and vim.api.nvim_win_get_config(win).relative ~= "" then
-                pcall(vim.treesitter.stop, args.buf)
-                return
-              end
-            end
-          end)
-        end,
-      })
+      -- vim.api.nvim_create_autocmd("BufWinEnter", {
+      --   callback = function(args)
+      --     vim.schedule(function()
+      --       if not vim.api.nvim_buf_is_valid(args.buf) then return end
+      --       for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
+      --         if vim.api.nvim_win_is_valid(win)
+      --             and vim.api.nvim_win_get_config(win).relative ~= "" then
+      --           pcall(vim.treesitter.stop, args.buf)
+      --           return
+      --         end
+      --       end
+      --     end)
+      --   end,
+      -- })
     end,
   },
 }
