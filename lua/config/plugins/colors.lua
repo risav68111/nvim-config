@@ -2,11 +2,48 @@ function ColorMyPencils(color)
   color = color or "gruvbox"
   vim.cmd.colorscheme(color)
 
+  local border = "rounded" -- "none" "single" "double" "rounded" "solid" "shadow"
+
+  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+    vim.lsp.handlers.hover, {
+      border = border,
+      max_width = 80,
+      max_height = 20,
+    }
+  )
+
+  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+    vim.lsp.handlers.signature_help, {
+      border = border,
+      max_width = 80,
+    }
+  )
+
+  vim.diagnostic.config({
+    float = {
+      border = border,
+      source = true,
+      header = "",
+      prefix = "",
+      max_width = 80,
+    },
+    virtual_text = true,
+    signs = true,
+    underline = true,
+    update_in_insert = false,
+  })
+
   vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
-  -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
-  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#2b0316" }) -- 2b0316,
-  vim.api.nvim_set_hl(0, "FloatBorder", { fg = "#e0e0e0" }) -- Light border color
+  vim.api.nvim_set_hl(0, "FloatBorder", { fg = "#89b4fa", bg = "NONE" }) -- border color
+  vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#282828" })              -- popup background
+  vim.api.nvim_set_hl(0, "FloatTitle", { fg = "#83a598", bold = true })  -- popup title
 end
+
+-- { fg = "#7aa2f7", bg = "#1a1b26" } -- Tokyo Night
+-- { fg = "#89b4fa", bg = "#1e1e2e" } -- Catppuccin Mocha
+-- { fg = "#83a598", bg = "#282828" } -- Gruvbox
+-- { fg = "#88c0d0", bg = "#2e3440" } -- Nord
+-- { bg = "NONE" } -- Transparent background
 
 return {
   {
@@ -85,7 +122,7 @@ return {
     config = function()
       require('mfd').setup({
         bright_comments = true, -- increase comment visibility (default: false)
-        no_italic = true,     -- disable italic highlighting (default: false)
+        no_italic = true,       -- disable italic highlighting (default: false)
       })
       -- vim.cmd('colorscheme mfd-lumon')
 
