@@ -120,18 +120,32 @@ return {
     -- cmp
     local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
+    local border = "single" -- "none" "single" "double" "rounded" "solid" "shadow"
     cmp.setup({
       snippet = {
         expand = function(args)
           require("luasnip").lsp_expand(args.body)
         end,
       },
+
+      window = { -- ← must be inside cmp.setup
+        completion = cmp.config.window.bordered({
+          border = border,
+          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+        }),
+        documentation = cmp.config.window.bordered({
+          border = border,
+          winhighlight = "Normal:NormalFloat,FloatBorder:FloatBorder,CursorLine:PmenuSel,Search:None",
+        }),
+      }, -- ← closes window = {
+
       mapping = cmp.mapping.preset.insert({
         ["<C-p>"] = cmp.mapping.select_prev_item(cmp_select),
         ["<C-n>"] = cmp.mapping.select_next_item(cmp_select),
         ["<C-y>"] = cmp.mapping.confirm({ select = true }),
         ["<C-Space>"] = cmp.mapping.complete(),
       }),
+
       sources = cmp.config.sources({
         { name = "nvim_lsp" },
         { name = "luasnip" },
@@ -139,6 +153,7 @@ return {
         { name = "buffer" },
       }),
     })
+
     -- cmdline completion for `:`
     cmp.setup.cmdline(":", {
       mapping = cmp.mapping.preset.cmdline(),
@@ -162,17 +177,6 @@ return {
       },
     })
 
-
-    -- diagnostics
-    vim.diagnostic.config({
-      float = {
-        focusable = false,
-        border = "rounded",
-        source = "always",
-      },
-    })
-
-    -- keymaps (FIXED)
     vim.keymap.set("n", "<leader>rf", vim.lsp.buf.rename)
 
     vim.keymap.set("n", "K", function()
@@ -180,11 +184,11 @@ return {
       if #diagnostics > 0 then
         vim.diagnostic.open_float(nil, {
           focus = false,
-          border = "rounded",
+          border = border,
         })
       else
         vim.lsp.buf.hover({
-          border = "rounded",
+          border = border,
         })
       end
     end, { silent = true })
