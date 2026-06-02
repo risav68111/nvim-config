@@ -4,36 +4,36 @@ function ColorMyPencils(color)
 
   local border = "rounded" -- "none" "single" "double" "rounded" "solid" "shadow"
 
-  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
-    vim.lsp.handlers.hover, {
-      border = border,
-      max_width = 80,
-      max_height = 20,
-    }
-  )
+  -- vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(
+  --   vim.lsp.handlers.hover, {
+  --     border = border,
+  --     max_width = 80,
+  --     max_height = 20,
+  --   }
+  -- )
+  --
+  -- vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
+  --   vim.lsp.handlers.signature_help, {
+  --     border = border,
+  --     max_width = 80,
+  --   }
+  -- )
+  --
+  -- vim.diagnostic.config({
+  --   float = {
+  --     border = border,
+  --     source = true,
+  --     header = "",
+  --     prefix = "",
+  --     max_width = 80,
+  --   },
+  --   virtual_text = true,
+  --   signs = true,
+  --   underline = true,
+  --   update_in_insert = false,
+  -- })
 
-  vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(
-    vim.lsp.handlers.signature_help, {
-      border = border,
-      max_width = 80,
-    }
-  )
-
-  vim.diagnostic.config({
-    float = {
-      border = border,
-      source = true,
-      header = "",
-      prefix = "",
-      max_width = 80,
-    },
-    virtual_text = true,
-    signs = true,
-    underline = true,
-    update_in_insert = false,
-  })
-
-  vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
+  vim.api.nvim_set_hl(0, "Normal", { bg = "NONE" })
   vim.api.nvim_set_hl(0, "FloatBorder", { fg = "#89b4fa", bg = "NONE" }) -- border color
   vim.api.nvim_set_hl(0, "NormalFloat", { bg = "#282828" })              -- popup background
   vim.api.nvim_set_hl(0, "FloatTitle", { fg = "#83a598", bold = true })  -- popup title
@@ -137,7 +137,7 @@ return {
 
       require('mfd').enable_cursor_sync()
 
-      ColorMyPencils() -- "mfd-flir-fusion"
+      ColorMyPencils("gruvbox") -- "mfd-flir-fusion"
     end,
   }
 }
