@@ -17,7 +17,18 @@ return {
 
   config = function()
     -- formatter
-    require("conform").setup({})
+    require("conform").setup({
+      formatters_by_ft = {
+        qml = { "qmlformat" },
+      },
+      formatters = {
+        qmlformat = {
+          command = "/usr/lib/qt6/bin/qmlformat",
+          args = { "--indent-width", "4", "$FILENAME" },
+          stdin = false,
+        },
+      },
+    })
 
     -- cmp capabilities
     local cmp = require("cmp")
@@ -117,6 +128,15 @@ return {
       },
     })
     vim.lsp.enable("gopls")
+
+    vim.lsp.config("qmlls", {
+      capabilities = capabilities,
+      cmd = { "qmlls", "-I", "/usr/lib/qt6/qml" },
+      on_attach = function(client, bufnr)
+        client.server_capabilities.semanticTokensProvider = nil
+      end,
+    })
+    vim.lsp.enable("qmlls")
 
     -- snippets
     require("luasnip.loaders.from_vscode").lazy_load()

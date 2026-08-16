@@ -19,7 +19,9 @@ vim.keymap.set("v", "<leader>p", "\"_dp")
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 
-vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
+vim.keymap.set("n", "<leader>f", function()
+  vim.lsp.buf.format({ async = true })
+end)
 
 -- Jump between markdown headers
 vim.keymap.set("n", "<leader>j", [[/^##\+<CR>]], { buffer = true, silent = true })
@@ -60,6 +62,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 local springboot = require('config.springboot')
 
+vim.api.nvim_create_user_command("Build", springboot.build, {desc = "Build Java application with gradle and maven with test runs."})
 vim.keymap.set("n", "<F10>", springboot.run, { desc = "Run Java App" })
 
 vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
