@@ -1,65 +1,48 @@
 local _lsp_float_active = false -- flag must be outside the return {}
 
+local ensure_installed = {
+  "vimdoc", "javascript", "typescript",
+  "c", "lua", "rust", "jsdoc", "bash",
+  "markdown", "markdown_inline", "regex", "comment",
+  "python", "java", "xml", "go", "gomod",
+  "yaml", "toml", "css", "html", "json",
+  "sql", "qmljs", "asm", "gitignore", "hyprlang",
+  "ini", "properties", "rasi", "desktop",
+}
+
 return {
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "main",
     build = ":TSUpdate",
-    branch = "master",
-    -- commit = "90cd658",
-    opts = {
-      ensure_installed = {
-        "vimdoc", "javascript", "typescript",
-        "c", "lua", "rust", "jsdoc", "bash",
-        "markdown", "markdown_inline",
-      },
+    lazy = false,
 
-      sync_install = false,
-      auto_install = true,
-
-      indent = {
-        enable = true,
-      },
-
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = false,
-        disable = function(lang, bufnr)
-          return _lsp_float_active
-        end,
-      },
-    },
-
-    config = function(_, opts)
-      require("nvim-treesitter.configs").setup(opts)
+    config = function()
+      require("nvim-treesitter").setup()
+      require("nvim-treesitter").install(ensure_installed)
 
       vim.treesitter.query.set("markdown", "injections", "")
       vim.treesitter.query.set("markdown_inline", "injections", "")
 
-      local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-      parser_config.templ = {
-        install_info = {
-          url = "https://github.com/vrischmann/tree-sitter-templ.git",
-          files = { "src/parser.c", "src/scanner.c" },
-          branch = "master",
-        },
-      }
+      vim.api.nvim_create_autocmd("FileType", {
+        callback = function(args)
+          if _lsp_float_active then return end
 
-      vim.treesitter.language.register("templ", "templ")
+          local buf = args.buf
+          local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
+          if not lang then return end
 
-      -- vim.api.nvim_create_autocmd("BufWinEnter", {
-      --   callback = function(args)
-      --     vim.schedule(function()
-      --       if not vim.api.nvim_buf_is_valid(args.buf) then return end
-      --       for _, win in ipairs(vim.fn.win_findbuf(args.buf)) do
-      --         if vim.api.nvim_win_is_valid(win)
-      --             and vim.api.nvim_win_get_config(win).relative ~= "" then
-      --           pcall(vim.treesitter.stop, args.buf)
-      --           return
-      --         end
-      --       end
-      --     end)
-      --   end,
-      -- })
+          if not vim.treesitter.language.add(lang) then
+            if vim.list_contains(require("nvim-treesitter").get_available(), lang) then
+              require("nvim-treesitter").install(lang):wait(60000)
+            end
+            if not vim.treesitter.language.add(lang) then return end
+          end
+
+          vim.treesitter.start(buf, lang)
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end,
+      })
     end,
   },
 }
