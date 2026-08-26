@@ -11,6 +11,20 @@ local jdtls_path = mason_path .. "packages/jdtls"
 local launcher_jar = vim.fn.glob(jdtls_path .. "/plugins/org.eclipse.equinox.launcher_*.jar", 1)
 local config_dir = jdtls_path .. '/config_linux'
 
+local function find_lombok_jar()
+  local cached = vim.fn.glob(
+    home .. '/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/*/*/lombok-*.jar', 1, 1)
+  local m2 = vim.fn.glob(home .. '/.m2/repository/org/projectlombok/lombok/*/lombok-*.jar', 1, 1)
+  vim.list_extend(cached, m2)
+  if #cached > 0 then
+    table.sort(cached)
+    return cached[#cached]
+  end
+  return jdtls_path .. '/lombok.jar'
+end
+
+local lombok_jar = find_lombok_jar()
+
 local root_markers = { '.git', 'mvnw', 'gradlew', 'pom.xml', 'build.gradle' }
 local root_dir = jdtls_setup.find_root(root_markers)
 if not root_dir then return end
@@ -43,8 +57,9 @@ local config = {
     '-Declipse.product=org.eclipse.jdt.ls.core.product',
     '-Dlog.protocol=true',
     '-Dlog.level=ALL',
-    '-Xms1g',
-    '-javaagent:' .. jdtls_path .. "/lombok.jar",
+    '-Xms512m',
+    '-Xmx2g',
+    '-javaagent:' .. lombok_jar,
     '--add-modules=ALL-SYSTEM',
     '--add-opens', 'java.base/java.util=ALL-UNNAMED',
     '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
@@ -58,6 +73,15 @@ local config = {
   settings = {
     java = {
       signatureHelp = { enabled = true },
+      imports = {
+        gradle = {
+          wrapper = {
+            checksums = {
+              { sha256 = '7a9ce74cff467ca1bf60a4fcd9f05185acceda4d0f382434d393e17864262c5d', allowed = true },
+            },
+          },
+        },
+      },
       completion = {
         favoriteStaticMembers = {
           'org.junit.Assert.*',

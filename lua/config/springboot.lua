@@ -63,7 +63,7 @@ function M.run()
   vim.api.nvim_win_set_buf(0, buf)
 
   vim.fn.termopen(cmd)
-  vim.cmd("startinsert")
+  -- vim.cmd("startinsert")
 end
 
 function M.build()
